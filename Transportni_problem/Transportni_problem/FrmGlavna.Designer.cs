@@ -34,13 +34,20 @@
             this.txtBrojOdredista = new System.Windows.Forms.TextBox();
             this.btnKreirajPraznuTablicu = new System.Windows.Forms.Button();
             this.pnlTablica = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.radioSZKut = new System.Windows.Forms.RadioButton();
+            this.radioMinTros = new System.Windows.Forms.RadioButton();
+            this.radioVogel = new System.Windows.Forms.RadioButton();
+            this.groupOdabirPocetnogRasporeda = new System.Windows.Forms.GroupBox();
+            this.btnPrikaziPocetniRaspored = new System.Windows.Forms.Button();
+            this.groupOdabirPocetnogRasporeda.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(13, 23);
+            this.label1.Location = new System.Drawing.Point(25, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(97, 17);
             this.label1.TabIndex = 0;
@@ -50,7 +57,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(12, 72);
+            this.label2.Location = new System.Drawing.Point(25, 77);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(100, 17);
             this.label2.TabIndex = 1;
@@ -58,7 +65,7 @@
             // 
             // txtBrojIshodista
             // 
-            this.txtBrojIshodista.Location = new System.Drawing.Point(116, 22);
+            this.txtBrojIshodista.Location = new System.Drawing.Point(128, 25);
             this.txtBrojIshodista.Name = "txtBrojIshodista";
             this.txtBrojIshodista.Size = new System.Drawing.Size(53, 20);
             this.txtBrojIshodista.TabIndex = 1;
@@ -66,7 +73,7 @@
             // txtBrojOdredista
             // 
             this.txtBrojOdredista.AcceptsReturn = true;
-            this.txtBrojOdredista.Location = new System.Drawing.Point(116, 71);
+            this.txtBrojOdredista.Location = new System.Drawing.Point(128, 74);
             this.txtBrojOdredista.Name = "txtBrojOdredista";
             this.txtBrojOdredista.Size = new System.Drawing.Size(53, 20);
             this.txtBrojOdredista.TabIndex = 2;
@@ -74,7 +81,7 @@
             // btnKreirajPraznuTablicu
             // 
             this.btnKreirajPraznuTablicu.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnKreirajPraznuTablicu.Location = new System.Drawing.Point(208, 20);
+            this.btnKreirajPraznuTablicu.Location = new System.Drawing.Point(220, 25);
             this.btnKreirajPraznuTablicu.Name = "btnKreirajPraznuTablicu";
             this.btnKreirajPraznuTablicu.Size = new System.Drawing.Size(184, 69);
             this.btnKreirajPraznuTablicu.TabIndex = 3;
@@ -84,16 +91,92 @@
             // 
             // pnlTablica
             // 
-            this.pnlTablica.Location = new System.Drawing.Point(16, 125);
+            this.pnlTablica.AutoSize = true;
+            this.pnlTablica.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pnlTablica.Location = new System.Drawing.Point(25, 122);
             this.pnlTablica.Name = "pnlTablica";
-            this.pnlTablica.Size = new System.Drawing.Size(376, 261);
+            this.pnlTablica.Size = new System.Drawing.Size(0, 0);
             this.pnlTablica.TabIndex = 11;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label3.Location = new System.Drawing.Point(20, 31);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(241, 16);
+            this.label3.TabIndex = 12;
+            this.label3.Text = "Odaberite metodu za početni raspored:";
+            // 
+            // radioSZKut
+            // 
+            this.radioSZKut.AutoSize = true;
+            this.radioSZKut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioSZKut.Location = new System.Drawing.Point(23, 61);
+            this.radioSZKut.Name = "radioSZKut";
+            this.radioSZKut.Size = new System.Drawing.Size(183, 19);
+            this.radioSZKut.TabIndex = 13;
+            this.radioSZKut.TabStop = true;
+            this.radioSZKut.Text = "Metoda sjeverozapdnog kuta";
+            this.radioSZKut.UseVisualStyleBackColor = true;
+            // 
+            // radioMinTros
+            // 
+            this.radioMinTros.AutoSize = true;
+            this.radioMinTros.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioMinTros.Location = new System.Drawing.Point(23, 93);
+            this.radioMinTros.Name = "radioMinTros";
+            this.radioMinTros.Size = new System.Drawing.Size(180, 19);
+            this.radioMinTros.TabIndex = 14;
+            this.radioMinTros.TabStop = true;
+            this.radioMinTros.Text = "Metoda minimalnih troškova";
+            this.radioMinTros.UseVisualStyleBackColor = true;
+            // 
+            // radioVogel
+            // 
+            this.radioVogel.AutoSize = true;
+            this.radioVogel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioVogel.Location = new System.Drawing.Point(23, 126);
+            this.radioVogel.Name = "radioVogel";
+            this.radioVogel.Size = new System.Drawing.Size(206, 19);
+            this.radioVogel.TabIndex = 15;
+            this.radioVogel.TabStop = true;
+            this.radioVogel.Text = "Vogelova aproksimativna metoda";
+            this.radioVogel.UseVisualStyleBackColor = true;
+            // 
+            // groupOdabirPocetnogRasporeda
+            // 
+            this.groupOdabirPocetnogRasporeda.Controls.Add(this.label3);
+            this.groupOdabirPocetnogRasporeda.Controls.Add(this.radioVogel);
+            this.groupOdabirPocetnogRasporeda.Controls.Add(this.radioSZKut);
+            this.groupOdabirPocetnogRasporeda.Controls.Add(this.radioMinTros);
+            this.groupOdabirPocetnogRasporeda.Location = new System.Drawing.Point(25, 232);
+            this.groupOdabirPocetnogRasporeda.Name = "groupOdabirPocetnogRasporeda";
+            this.groupOdabirPocetnogRasporeda.Size = new System.Drawing.Size(280, 171);
+            this.groupOdabirPocetnogRasporeda.TabIndex = 16;
+            this.groupOdabirPocetnogRasporeda.TabStop = false;
+            this.groupOdabirPocetnogRasporeda.Text = "Odabir metode početnog rasporeda";
+            // 
+            // btnPrikaziPocetniRaspored
+            // 
+            this.btnPrikaziPocetniRaspored.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnPrikaziPocetniRaspored.Location = new System.Drawing.Point(25, 431);
+            this.btnPrikaziPocetniRaspored.Name = "btnPrikaziPocetniRaspored";
+            this.btnPrikaziPocetniRaspored.Size = new System.Drawing.Size(183, 28);
+            this.btnPrikaziPocetniRaspored.TabIndex = 17;
+            this.btnPrikaziPocetniRaspored.Text = "Prikaži početni raspored";
+            this.btnPrikaziPocetniRaspored.UseVisualStyleBackColor = true;
+            this.btnPrikaziPocetniRaspored.Click += new System.EventHandler(this.btnPrikaziPocetniRaspored_Click);
             // 
             // FrmGlavna
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(450, 423);
+            this.AutoScroll = true;
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(463, 497);
+            this.Controls.Add(this.btnPrikaziPocetniRaspored);
+            this.Controls.Add(this.groupOdabirPocetnogRasporeda);
             this.Controls.Add(this.pnlTablica);
             this.Controls.Add(this.btnKreirajPraznuTablicu);
             this.Controls.Add(this.txtBrojOdredista);
@@ -103,6 +186,9 @@
             this.Name = "FrmGlavna";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transportni problem";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.groupOdabirPocetnogRasporeda.ResumeLayout(false);
+            this.groupOdabirPocetnogRasporeda.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -116,6 +202,12 @@
         private System.Windows.Forms.TextBox txtBrojOdredista;
         private System.Windows.Forms.Button btnKreirajPraznuTablicu;
         private System.Windows.Forms.Panel pnlTablica;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RadioButton radioSZKut;
+        private System.Windows.Forms.RadioButton radioMinTros;
+        private System.Windows.Forms.RadioButton radioVogel;
+        private System.Windows.Forms.GroupBox groupOdabirPocetnogRasporeda;
+        private System.Windows.Forms.Button btnPrikaziPocetniRaspored;
     }
 }
 

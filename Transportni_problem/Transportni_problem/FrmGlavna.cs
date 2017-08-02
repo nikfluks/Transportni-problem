@@ -15,6 +15,8 @@ namespace Transportni_problem
         public FrmGlavna()
         {
             InitializeComponent();
+            groupOdabirPocetnogRasporeda.Visible = false;
+            btnPrikaziPocetniRaspored.Visible = false;
         }
 
         int brojIshodista;
@@ -36,9 +38,13 @@ namespace Transportni_problem
 
             pnlTablica.Controls.Clear();
 
+
             NacrtajRetke();
             NacrtajStupce();
             NacrtajCelije();
+
+            PrikaziMetodeZaPocetniRaspored();
+            PrikaziGumbZaPocetniRaspored();
 
         }
 
@@ -60,7 +66,7 @@ namespace Transportni_problem
 
             Label labelaIs = new Label();
             labelaIs.Text = "Bj";
-            labelaIs.Location = new Point(10, y + 10);
+            labelaIs.Location = new Point(10, y + 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
             labelaIs.Size = new Size(30, 15);
 
             if (pnlTablica.Height < y)//ako je panel premali, tj sljedece ishodiste se nebi vidjelo, povecamo ga
@@ -86,15 +92,15 @@ namespace Transportni_problem
                 pnlTablica.Controls.Add(labelaO);
             }
 
+            Label labelaOd = new Label();
+            labelaOd.Text = "Ai";
+            labelaOd.Location = new Point(x + 10, 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
+            labelaOd.Size = new Size(30, 15);
+
             if (pnlTablica.Width < x)//ako je panel premali, tj sljedece odrediste se nebi vidjelo, povecamo ga
             {
                 pnlTablica.Width = x + 65;
             }
-
-            Label labelaOd = new Label();
-            labelaOd.Text = "Ai";
-            labelaOd.Location = new Point(x + 10, 10);
-            labelaOd.Size = new Size(30, 15);
 
             pnlTablica.Controls.Add(labelaOd);
         }
@@ -105,20 +111,39 @@ namespace Transportni_problem
             int y = 40;
             bool zadnji = false;
 
-            for (int i = 1; i <= (brojIshodista + 1) * (brojOdredista + 1); i++)
+            for (int i = 1; i <= (brojIshodista + 1) * (brojOdredista + 1); i++) //+1 ide da crtam celije za Ai i Bj
             {
-                if (i % (brojOdredista + 1) == 0) 
+                TextBox celija = new TextBox();
+
+
+                if (i % (brojOdredista + 1) == 0) //provjera dal je doslo do kraja obicnih celija, tj sljedeca ce biti Ai celija
                 {
-                    x += 10;
+                    x += 10; //+10 je radi estetike da bude razmak izmedu obicnih celija
+
+                    if (i == (brojIshodista + 1) * (brojOdredista + 1))
+                    {
+                        celija.Tag = "Sum";
+                    }
+
+                    else
+                    {
+                        celija.Tag = "Ai";
+                    }
                 }
 
-                if (i > ((brojIshodista + 1) * (brojOdredista + 1)) - (brojOdredista + 1) && !zadnji)
+                else if (i > ((brojIshodista + 1) * (brojOdredista + 1)) - (brojOdredista + 1) && !zadnji) //provjera dal je doslo do kraja obicnih celija, tj sljedeca ce biti Bj celija
                 {
                     y += 10;
                     zadnji = true;
+                    celija.Tag = "Bj";
                 }
 
-                TextBox celija = new TextBox();
+                else
+                {
+                    celija.Tag = "Obicna";
+                }
+
+                
                 celija.Location = new Point(x, y);
                 celija.Size = new Size(60, 40);
                 celija.Multiline = true;
@@ -128,6 +153,7 @@ namespace Transportni_problem
                     x = 40;
                     y += 45;
                 }
+
                 else //inace se samo pomicemo udesno
                 {
                     x += 65;
@@ -135,7 +161,24 @@ namespace Transportni_problem
 
                 pnlTablica.Controls.Add(celija);
             }
+        }
 
+        private void PrikaziMetodeZaPocetniRaspored()
+        {
+            groupOdabirPocetnogRasporeda.Location = new Point(25, pnlTablica.Location.Y + pnlTablica.Height + 15);
+            groupOdabirPocetnogRasporeda.Visible = true;
+        }
+
+        private void PrikaziGumbZaPocetniRaspored()
+        {
+            btnPrikaziPocetniRaspored.Location = new Point(25, groupOdabirPocetnogRasporeda.Location.Y + groupOdabirPocetnogRasporeda.Height + 20);
+            btnPrikaziPocetniRaspored.Visible = true;
+        }
+
+        private void btnPrikaziPocetniRaspored_Click(object sender, EventArgs e)
+        {
+            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored();
+            frmPocetniRaspored.ShowDialog();
         }
     }
 }
