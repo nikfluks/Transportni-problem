@@ -109,57 +109,68 @@ namespace Transportni_problem
         {
             int x = 40;
             int y = 40;
-            bool zadnji = false;
+            
 
-            for (int i = 1; i <= (brojIshodista + 1) * (brojOdredista + 1); i++) //+1 ide da crtam celije za Ai i Bj
+            for (int i = 1; i <= brojIshodista + 1; i++)//broj ishodišta/redova, +1 je za Bj
             {
-                TextBox celija = new TextBox();
+                bool zadnji = false;
 
-
-                if (i % (brojOdredista + 1) == 0) //provjera dal je doslo do kraja obicnih celija, tj sljedeca ce biti Ai celija
+                for (int j = 1; j <= brojOdredista + 1; j++)//broj odredišta/stupaca, +1 je za Ai
                 {
-                    x += 10; //+10 je radi estetike da bude razmak izmedu obicnih celija
+                    TextBox celija = new TextBox();
 
-                    if (i == (brojIshodista + 1) * (brojOdredista + 1))
+                    if (i == brojIshodista + 1 && j == brojOdredista + 1)//provjera je li trenutna celija zadnja
                     {
-                        celija.Tag = "Sum";
+                        celija.Tag = "Sum-" + i + "-" + j;
+                        celija.ReadOnly = true;
+                        x += 10;
                     }
 
-                    else
+                    else if (i == brojIshodista + 1)//provjera je li redak zadnji
                     {
-                        celija.Tag = "Ai";
+                        celija.Tag = "Bj-" + i + "-" + j;
+
+                        if (!zadnji)
+                        {
+                            zadnji = true;
+                            y += 10;
+                        }
                     }
+
+                    else if (j == brojOdredista + 1)//provjera je li stupac zadnji
+                    {
+                        celija.Tag = "Ai-" + i + "-" + j;
+
+                        if (!zadnji)
+                        {
+                            zadnji = true;
+                            x += 10;
+                        }
+                    }
+
+                    else//sve ostale celije
+                    {
+                        celija.Tag = "Obicna-" + i + "-" + j;
+                    }
+
+                    celija.Location = new Point(x, y);
+                    celija.Size = new Size(60, 40);
+                    celija.Multiline = true;
+
+                    pnlTablica.Controls.Add(celija);
+
+                    if (j == brojOdredista + 1) //ako smo dosli do kraja reda, prebacujemo se u novi red
+                    {
+                        x = 40;
+                        y += 45;
+                    }
+
+                    else //inace se samo pomicemo udesno
+                    {
+                        x += 65;
+                    }
+
                 }
-
-                else if (i > ((brojIshodista + 1) * (brojOdredista + 1)) - (brojOdredista + 1) && !zadnji) //provjera dal je doslo do kraja obicnih celija, tj sljedeca ce biti Bj celija
-                {
-                    y += 10;
-                    zadnji = true;
-                    celija.Tag = "Bj";
-                }
-
-                else
-                {
-                    celija.Tag = "Obicna";
-                }
-
-                
-                celija.Location = new Point(x, y);
-                celija.Size = new Size(60, 40);
-                celija.Multiline = true;
-
-                if (i % (brojOdredista + 1) == 0) //ako smo dosli do kraja reda, prebacujemo se u novi red
-                {
-                    x = 40;
-                    y += 45;
-                }
-
-                else //inace se samo pomicemo udesno
-                {
-                    x += 65;
-                }
-
-                pnlTablica.Controls.Add(celija);
             }
         }
 
