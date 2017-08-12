@@ -12,9 +12,25 @@ namespace Transportni_problem
 {
     public partial class FrmPocetniRaspored : Form
     {
-        public FrmPocetniRaspored()
+        public FrmPocetniRaspored(List<double> listalistaVrijednostiCelija, string odabraniPocetniRaspored)
         {
             InitializeComponent();
+            PocetniRaspored pocetniRaspored = new PocetniRaspored(listalistaVrijednostiCelija);
+
+            if (odabraniPocetniRaspored == "SjeveroZpadniKut")
+            {
+                pocetniRaspored.SjeveroZapadniKut();
+            }
+
+            else if (odabraniPocetniRaspored == "MinTrosak")
+            {
+                pocetniRaspored.MinTrosak();
+            }
+
+            else if (odabraniPocetniRaspored == "Vogel")
+            {
+                pocetniRaspored.Vogel();
+            }
         }
     }
 }

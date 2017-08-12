@@ -29,15 +29,19 @@ namespace Transportni_problem
                 brojIshodista = int.Parse(txtBrojIshodista.Text);
                 brojOdredista = int.Parse(txtBrojOdredista.Text);
 
+                if (brojIshodista <= 0 || brojOdredista <= 0) 
+                {
+                    MessageBox.Show("Pogrešan unos!" + Environment.NewLine + "Niste unijeli pozitivan broj!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
             catch (FormatException)
             {
-                MessageBox.Show("Pogrešan unos!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Pogrešan unos!" + Environment.NewLine + "Niste unijeli (cijeli) broj!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             pnlTablica.Controls.Clear();
-
 
             NacrtajRetke();
             NacrtajStupce();
@@ -69,7 +73,7 @@ namespace Transportni_problem
             labelaIs.Location = new Point(10, y + 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
             labelaIs.Size = new Size(30, 15);
 
-            if (pnlTablica.Height < y)//ako je panel premali, tj sljedece ishodiste se nebi vidjelo, povecamo ga
+            if (pnlTablica.Height < y)//ako je panel pre niski, povecamo ga
             {
                 pnlTablica.Height = y + 45;
             }
@@ -97,7 +101,7 @@ namespace Transportni_problem
             labelaOd.Location = new Point(x + 10, 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
             labelaOd.Size = new Size(30, 15);
 
-            if (pnlTablica.Width < x)//ako je panel premali, tj sljedece odrediste se nebi vidjelo, povecamo ga
+            if (pnlTablica.Width < x)//ako je panel pre uski, povecamo ga
             {
                 pnlTablica.Width = x + 65;
             }
@@ -176,7 +180,7 @@ namespace Transportni_problem
 
         private void PrikaziMetodeZaPocetniRaspored()
         {
-            groupOdabirPocetnogRasporeda.Location = new Point(25, pnlTablica.Location.Y + pnlTablica.Height + 15);
+            groupOdabirPocetnogRasporeda.Location = new Point(25, pnlTablica.Location.Y + pnlTablica.Height + 20);
             groupOdabirPocetnogRasporeda.Visible = true;
         }
 
@@ -188,7 +192,63 @@ namespace Transportni_problem
 
         private void btnPrikaziPocetniRaspored_Click(object sender, EventArgs e)
         {
-            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored();
+            List<double> listaVrijednostiCelija = new List<double>();
+            double vrijednostCelije;
+            string[] poljeTagova = new string[pnlTablica.Controls.Count];
+
+            foreach (Control kontrola in pnlTablica.Controls)
+            {
+                if (typeof(TextBox) == kontrola.GetType())
+                {
+                    poljeTagova = kontrola.Tag.ToString().Split('-');
+
+                    if (poljeTagova[0] != "Sum")
+                    {
+                        if (double.TryParse(kontrola.Text, out vrijednostCelije))
+                        {
+                            if (vrijednostCelije>=0)
+                            {
+                                listaVrijednostiCelija.Add(vrijednostCelije);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Greška na poziciji " + poljeTagova[1] + "-" + poljeTagova[2] + "." + Environment.NewLine + "Niste unijeli pozitivan broj!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Greška na poziciji " + poljeTagova[1] + "-" + poljeTagova[2] + "." + Environment.NewLine + "Niste unijeli (decimalni) broj!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            string odabraniPocetniRaspored;
+
+            if (radioSZKut.Checked)
+            {
+                odabraniPocetniRaspored = "SjeveroZpadniKut";
+            }
+
+            else if (radioMinTros.Checked)
+            {
+                odabraniPocetniRaspored = "MinTrosak";
+            }
+
+            else if (radioVogel.Checked)
+            {
+                odabraniPocetniRaspored = "Vogel";
+            }
+
+            else
+            {
+                MessageBox.Show("Niste odabrani metodu za početni raspored!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaVrijednostiCelija, odabraniPocetniRaspored);
             frmPocetniRaspored.ShowDialog();
         }
     }

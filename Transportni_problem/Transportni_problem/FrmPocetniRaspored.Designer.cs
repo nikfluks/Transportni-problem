@@ -37,7 +37,7 @@
             this.ClientSize = new System.Drawing.Size(435, 405);
             this.Name = "FrmPocetniRaspored";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FrmPocetniRaspored";
+            this.Text = "Početni raspored";
             this.ResumeLayout(false);
 
         }

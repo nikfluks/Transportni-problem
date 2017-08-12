@@ -58,6 +58,7 @@
     <Compile Include="FrmPocetniRaspored.Designer.cs">
       <DependentUpon>FrmPocetniRaspored.cs</DependentUpon>
     </Compile>
+    <Compile Include="PocetniRaspored.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmGlavna.resx">

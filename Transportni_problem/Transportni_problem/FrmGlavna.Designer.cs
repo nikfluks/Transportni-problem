@@ -85,7 +85,7 @@
             this.btnKreirajPraznuTablicu.Name = "btnKreirajPraznuTablicu";
             this.btnKreirajPraznuTablicu.Size = new System.Drawing.Size(184, 69);
             this.btnKreirajPraznuTablicu.TabIndex = 3;
-            this.btnKreirajPraznuTablicu.Text = "Kreiraj praznu tablicu";
+            this.btnKreirajPraznuTablicu.Text = "Kreiraj matricu troškova";
             this.btnKreirajPraznuTablicu.UseVisualStyleBackColor = true;
             this.btnKreirajPraznuTablicu.Click += new System.EventHandler(this.btnKreirajPraznuTablicu_Click);
             // 
