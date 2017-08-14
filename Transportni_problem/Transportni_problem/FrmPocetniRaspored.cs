@@ -12,10 +12,13 @@ namespace Transportni_problem
 {
     public partial class FrmPocetniRaspored : Form
     {
-        public FrmPocetniRaspored(List<double> listalistaVrijednostiCelija, string odabraniPocetniRaspored)
+        public FrmPocetniRaspored(List<Celija> listaCelija, string odabraniPocetniRaspored, Panel pnlTablica)
         {
             InitializeComponent();
-            PocetniRaspored pocetniRaspored = new PocetniRaspored(listalistaVrijednostiCelija);
+            PocetniRaspored pocetniRaspored = new PocetniRaspored(listaCelija);
+            pnlTablica.Location = new Point(20, 20);
+            //pnlTablica.Show();
+            this.Controls.Add(pnlTablica);
 
             if (odabraniPocetniRaspored == "SjeveroZpadniKut")
             {

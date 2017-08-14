@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Transportni_problem
 {
-    class PocetniRaspored
+    public class PocetniRaspored
     {
-        List<double> listaVrijednostiCelija;
+        List<Celija> listaCelija;
 
-        public PocetniRaspored(List<double> listaVrijednostiCelija)
+        public PocetniRaspored(List<Celija> listaCelija)
         {
-            this.listaVrijednostiCelija = listaVrijednostiCelija;
+            this.listaCelija = listaCelija;
         }
 
         public void SjeveroZapadniKut()

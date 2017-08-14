@@ -114,7 +114,6 @@ namespace Transportni_problem
             int x = 40;
             int y = 40;
             
-
             for (int i = 1; i <= brojIshodista + 1; i++)//broj ishodišta/redova, +1 je za Bj
             {
                 bool zadnji = false;
@@ -173,7 +172,6 @@ namespace Transportni_problem
                     {
                         x += 65;
                     }
-
                 }
             }
         }
@@ -192,8 +190,10 @@ namespace Transportni_problem
 
         private void btnPrikaziPocetniRaspored_Click(object sender, EventArgs e)
         {
-            List<double> listaVrijednostiCelija = new List<double>();
-            double vrijednostCelije;
+            List<Celija> listaCelija = new List<Celija>();
+
+            //List<double> listaVrijednostiCelija = new List<double>();
+            double stvarniTrosak;
             string[] poljeTagova = new string[pnlTablica.Controls.Count];
 
             foreach (Control kontrola in pnlTablica.Controls)
@@ -204,11 +204,13 @@ namespace Transportni_problem
 
                     if (poljeTagova[0] != "Sum")
                     {
-                        if (double.TryParse(kontrola.Text, out vrijednostCelije))
+                        if (double.TryParse(kontrola.Text, out stvarniTrosak))
                         {
-                            if (vrijednostCelije>=0)
+                            if (stvarniTrosak >= 0)
                             {
-                                listaVrijednostiCelija.Add(vrijednostCelije);
+                                Celija novaCelija = new Celija(poljeTagova[0], int.Parse(poljeTagova[1]), int.Parse(poljeTagova[2]), stvarniTrosak);
+                                listaCelija.Add(novaCelija);
+                                //listaVrijednostiCelija.Add(vrijednostCelije);
                             }
                             else
                             {
@@ -248,8 +250,11 @@ namespace Transportni_problem
                 return;
             }
 
-            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaVrijednostiCelija, odabraniPocetniRaspored);
+            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, pnlTablica);
             frmPocetniRaspored.ShowDialog();
+
+            pnlTablica.Location = new Point(25, 122);
+            this.Controls.Add(pnlTablica);
         }
     }
 }
