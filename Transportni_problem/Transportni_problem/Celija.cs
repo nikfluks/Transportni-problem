@@ -8,12 +8,12 @@ namespace Transportni_problem
 {
     public class Celija
     {
-        string opis;
-        int red;
-        int stupac;
-        double stvarniTrosak;
-        //double kolicinaTereta;
-        //double relativniTrosak;
+        public string opis;
+        public int red;
+        public int stupac;
+        public double stvarniTrosak;
+        public double kolicinaTereta;
+        //public double relativniTrosak;
 
         public Celija(string opis, int red, int stupac, double stvarniTrosak)
         {

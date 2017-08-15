@@ -41,7 +41,7 @@ namespace Transportni_problem
                 return;
             }
 
-            pnlTablica.Controls.Clear();
+            pnlMatricaTroskova.Controls.Clear();
 
             NacrtajRetke();
             NacrtajStupce();
@@ -65,7 +65,7 @@ namespace Transportni_problem
                 //labelaI.Font = new Font(labelaI.Font.FontFamily, 15, FontStyle.Bold);
                 y += 45;
 
-                pnlTablica.Controls.Add(labelaI);
+                pnlMatricaTroskova.Controls.Add(labelaI);
             }
 
             Label labelaIs = new Label();
@@ -73,12 +73,12 @@ namespace Transportni_problem
             labelaIs.Location = new Point(10, y + 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
             labelaIs.Size = new Size(30, 15);
 
-            if (pnlTablica.Height < y)//ako je panel pre niski, povecamo ga
+            if (pnlMatricaTroskova.Height < y)//ako je panel pre niski, povecamo ga
             {
-                pnlTablica.Height = y + 45;
+                pnlMatricaTroskova.Height = y + 45;
             }
 
-            pnlTablica.Controls.Add(labelaIs);
+            pnlMatricaTroskova.Controls.Add(labelaIs);
         }
 
         private void NacrtajStupce()
@@ -93,7 +93,7 @@ namespace Transportni_problem
                 labelaO.Size = new Size(30, 15);
                 x += 65;
 
-                pnlTablica.Controls.Add(labelaO);
+                pnlMatricaTroskova.Controls.Add(labelaO);
             }
 
             Label labelaOd = new Label();
@@ -101,12 +101,12 @@ namespace Transportni_problem
             labelaOd.Location = new Point(x + 10, 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
             labelaOd.Size = new Size(30, 15);
 
-            if (pnlTablica.Width < x)//ako je panel pre uski, povecamo ga
+            if (pnlMatricaTroskova.Width < x)//ako je panel pre uski, povecamo ga
             {
-                pnlTablica.Width = x + 65;
+                pnlMatricaTroskova.Width = x + 65;
             }
 
-            pnlTablica.Controls.Add(labelaOd);
+            pnlMatricaTroskova.Controls.Add(labelaOd);
         }
 
         private void NacrtajCelije()
@@ -120,7 +120,7 @@ namespace Transportni_problem
 
                 for (int j = 1; j <= brojOdredista + 1; j++)//broj odredišta/stupaca, +1 je za Ai
                 {
-                    TextBox celija = new TextBox();
+                    RichTextBox celija = new RichTextBox();
 
                     if (i == brojIshodista + 1 && j == brojOdredista + 1)//provjera je li trenutna celija zadnja
                     {
@@ -160,7 +160,7 @@ namespace Transportni_problem
                     celija.Size = new Size(60, 40);
                     celija.Multiline = true;
 
-                    pnlTablica.Controls.Add(celija);
+                    pnlMatricaTroskova.Controls.Add(celija);
 
                     if (j == brojOdredista + 1) //ako smo dosli do kraja reda, prebacujemo se u novi red
                     {
@@ -178,7 +178,7 @@ namespace Transportni_problem
 
         private void PrikaziMetodeZaPocetniRaspored()
         {
-            groupOdabirPocetnogRasporeda.Location = new Point(25, pnlTablica.Location.Y + pnlTablica.Height + 20);
+            groupOdabirPocetnogRasporeda.Location = new Point(25, pnlMatricaTroskova.Location.Y + pnlMatricaTroskova.Height + 20);
             groupOdabirPocetnogRasporeda.Visible = true;
         }
 
@@ -191,14 +191,12 @@ namespace Transportni_problem
         private void btnPrikaziPocetniRaspored_Click(object sender, EventArgs e)
         {
             List<Celija> listaCelija = new List<Celija>();
-
-            //List<double> listaVrijednostiCelija = new List<double>();
             double stvarniTrosak;
-            string[] poljeTagova = new string[pnlTablica.Controls.Count];
+            string[] poljeTagova = new string[pnlMatricaTroskova.Controls.Count];
 
-            foreach (Control kontrola in pnlTablica.Controls)
+            foreach (Control kontrola in pnlMatricaTroskova.Controls)
             {
-                if (typeof(TextBox) == kontrola.GetType())
+                if (typeof(RichTextBox) == kontrola.GetType())
                 {
                     poljeTagova = kontrola.Tag.ToString().Split('-');
 
@@ -210,7 +208,6 @@ namespace Transportni_problem
                             {
                                 Celija novaCelija = new Celija(poljeTagova[0], int.Parse(poljeTagova[1]), int.Parse(poljeTagova[2]), stvarniTrosak);
                                 listaCelija.Add(novaCelija);
-                                //listaVrijednostiCelija.Add(vrijednostCelije);
                             }
                             else
                             {
@@ -223,6 +220,11 @@ namespace Transportni_problem
                             MessageBox.Show("Greška na poziciji " + poljeTagova[1] + "-" + poljeTagova[2] + "." + Environment.NewLine + "Niste unijeli (decimalni) broj!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
+                    }
+                    else
+                    {
+                        Celija novaCelija = new Celija(poljeTagova[0], int.Parse(poljeTagova[1]), int.Parse(poljeTagova[2]), 0);
+                        listaCelija.Add(novaCelija);
                     }
                 }
             }
@@ -250,11 +252,15 @@ namespace Transportni_problem
                 return;
             }
 
-            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, pnlTablica);
+            Panel pnlPocetniRaspored = new Panel();
+            pnlPocetniRaspored = pnlMatricaTroskova;
+
+            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, pnlPocetniRaspored, brojIshodista, brojOdredista);
             frmPocetniRaspored.ShowDialog();
 
-            pnlTablica.Location = new Point(25, 122);
-            this.Controls.Add(pnlTablica);
+            pnlMatricaTroskova.Location = new Point(25, 122);
+            this.Controls.Remove(pnlMatricaTroskova);
+            this.Controls.Add(pnlMatricaTroskova);
         }
     }
 }

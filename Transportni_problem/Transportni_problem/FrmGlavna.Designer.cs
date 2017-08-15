@@ -33,7 +33,7 @@
             this.txtBrojIshodista = new System.Windows.Forms.TextBox();
             this.txtBrojOdredista = new System.Windows.Forms.TextBox();
             this.btnKreirajPraznuTablicu = new System.Windows.Forms.Button();
-            this.pnlTablica = new System.Windows.Forms.Panel();
+            this.pnlMatricaTroskova = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.radioSZKut = new System.Windows.Forms.RadioButton();
             this.radioMinTros = new System.Windows.Forms.RadioButton();
@@ -89,14 +89,14 @@
             this.btnKreirajPraznuTablicu.UseVisualStyleBackColor = true;
             this.btnKreirajPraznuTablicu.Click += new System.EventHandler(this.btnKreirajPraznuTablicu_Click);
             // 
-            // pnlTablica
+            // pnlMatricaTroskova
             // 
-            this.pnlTablica.AutoSize = true;
-            this.pnlTablica.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.pnlTablica.Location = new System.Drawing.Point(25, 122);
-            this.pnlTablica.Name = "pnlTablica";
-            this.pnlTablica.Size = new System.Drawing.Size(0, 0);
-            this.pnlTablica.TabIndex = 11;
+            this.pnlMatricaTroskova.AutoSize = true;
+            this.pnlMatricaTroskova.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.pnlMatricaTroskova.Location = new System.Drawing.Point(25, 122);
+            this.pnlMatricaTroskova.Name = "pnlMatricaTroskova";
+            this.pnlMatricaTroskova.Size = new System.Drawing.Size(0, 0);
+            this.pnlMatricaTroskova.TabIndex = 11;
             // 
             // label3
             // 
@@ -177,7 +177,7 @@
             this.ClientSize = new System.Drawing.Size(463, 497);
             this.Controls.Add(this.btnPrikaziPocetniRaspored);
             this.Controls.Add(this.groupOdabirPocetnogRasporeda);
-            this.Controls.Add(this.pnlTablica);
+            this.Controls.Add(this.pnlMatricaTroskova);
             this.Controls.Add(this.btnKreirajPraznuTablicu);
             this.Controls.Add(this.txtBrojOdredista);
             this.Controls.Add(this.txtBrojIshodista);
@@ -201,7 +201,7 @@
         private System.Windows.Forms.TextBox txtBrojIshodista;
         private System.Windows.Forms.TextBox txtBrojOdredista;
         private System.Windows.Forms.Button btnKreirajPraznuTablicu;
-        private System.Windows.Forms.Panel pnlTablica;
+        private System.Windows.Forms.Panel pnlMatricaTroskova;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton radioSZKut;
         private System.Windows.Forms.RadioButton radioMinTros;
