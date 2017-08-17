@@ -11,6 +11,7 @@ namespace Transportni_problem
         public List<Celija> listaCelija;
         int brojIshodista;
         int brojOdredista;
+        public double sumaAi;
 
         public PocetniRaspored(List<Celija> listaCelija, int brojIshodista, int brojOdredista)
         {
@@ -32,13 +33,14 @@ namespace Transportni_problem
             {
                 sumaKolicinePoRedu = 0;
                 sumaKolicinePoStupcu = 0;
+                sumaAi = 0;
 
                 if (obicnaCelija.opis == "Obicna" && obicnaCelija.red == r && obicnaCelija.stupac == s)//idemo po svim celijama pocevsi s gornjom lijevom, a završavamo s donjom desnom
                 {
-                    int i = 0;
+                    //int i = 0;
                     foreach (Celija celija in listaCelija)
                     {
-                        i++;
+                        //i++;
                         if (celija.opis == "Ai" && celija.red == r)//trazimo kapacitet ishodista za taj red
                         {
                             Ai = celija.stvarniTrosak;
@@ -58,10 +60,20 @@ namespace Transportni_problem
                         {
                             sumaKolicinePoStupcu += celija.kolicinaTereta;
                         }
+
+                        //trazimo sumu kapaciteta ishodista
+                        //isto se moze napraviviti i za potrebe odredista i usporediti jesu li te vrijedosti iste (ZTP vs OTP) 
+                        if (celija.opis == "Ai")
+                        {
+                            sumaAi += celija.stvarniTrosak;
+                        }
                     }
 
                     //provjeravamo jesu li potrebe odredista manje od kapaciteta ishodista umanjene za potrosenu robu po tom ishodistu (redu)
                     //ako jesu znaci da imamo dovoljno robe da zadovoljimo potrebe odredista i to upisujemo
+
+                    //Bj = potreba
+                    //Ai - sumaKolicinePoRedu = trenutna raspolozivost
                     if (Bj < Ai - sumaKolicinePoRedu)
                     {
                         obicnaCelija.kolicinaTereta = Bj;
@@ -76,6 +88,9 @@ namespace Transportni_problem
 
                     //na kraju jos provjeravamo da nismo previse upisali po stupcu, ako jesmo onda to korigiramo
                     //na nacin da provjerimo je li trenutno zapisana kolicina veca od razlike potrebe odredista i kolicine robe koja je vec dopremljena tom odredistu
+
+                    //obicnaCelija.kolicinaTereta = vec zapisana kolicina tereta
+                    //Bj - sumaKolicinePoStupcu = potreba
                     if (obicnaCelija.kolicinaTereta > Bj - sumaKolicinePoStupcu)
                     {
                         obicnaCelija.kolicinaTereta = Bj - sumaKolicinePoStupcu;

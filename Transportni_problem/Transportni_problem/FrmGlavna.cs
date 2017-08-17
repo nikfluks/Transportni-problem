@@ -192,7 +192,7 @@ namespace Transportni_problem
         {
             List<Celija> listaCelija = new List<Celija>();
             double stvarniTrosak;
-            string[] poljeTagova = new string[pnlMatricaTroskova.Controls.Count];
+            string[] poljeTagova = new string[3];
 
             foreach (Control kontrola in pnlMatricaTroskova.Controls)
             {
@@ -221,7 +221,7 @@ namespace Transportni_problem
                             return;
                         }
                     }
-                    else
+                    else//samo dodamo celiju za sum u listu
                     {
                         Celija novaCelija = new Celija(poljeTagova[0], int.Parse(poljeTagova[1]), int.Parse(poljeTagova[2]), 0);
                         listaCelija.Add(novaCelija);
@@ -252,14 +252,14 @@ namespace Transportni_problem
                 return;
             }
 
-            Panel pnlPocetniRaspored = new Panel();
-            pnlPocetniRaspored = pnlMatricaTroskova;
+            /*Panel pnlPocetniRaspored = new Panel();
+            pnlPocetniRaspored = pnlMatricaTroskova;*/
 
-            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, pnlPocetniRaspored, brojIshodista, brojOdredista);
+            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, pnlMatricaTroskova, brojIshodista, brojOdredista);
             frmPocetniRaspored.ShowDialog();
 
             pnlMatricaTroskova.Location = new Point(25, 122);
-            this.Controls.Remove(pnlMatricaTroskova);
+            //this.Controls.Remove(pnlMatricaTroskova);
             this.Controls.Add(pnlMatricaTroskova);
         }
     }

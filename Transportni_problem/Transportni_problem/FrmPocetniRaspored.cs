@@ -28,7 +28,7 @@ namespace Transportni_problem
             if (odabraniPocetniRaspored == "SjeveroZpadniKut")
             {
                 pocetniRaspored.SjeveroZapadniKut();
-                PrikaziPocetniRaspored(pocetniRaspored.listaCelija);
+                PrikaziPocetniRaspored();
             }
 
             else if (odabraniPocetniRaspored == "MinTrosak")
@@ -42,9 +42,9 @@ namespace Transportni_problem
             }
         }
 
-        private void PrikaziPocetniRaspored(List<Celija> listaCelija)
+        private void PrikaziPocetniRaspored()
         {
-            string[] poljeTagova = new string[pnlPocetniRaspored.Controls.Count];
+            string[] poljeTagova = new string[3];
 
             foreach (Control kontrola in pnlPocetniRaspored.Controls)
             {
@@ -55,7 +55,7 @@ namespace Transportni_problem
 
                     if (poljeTagova[0] == "Obicna")
                     {
-                        foreach (Celija celija in listaCelija)
+                        foreach (Celija celija in pocetniRaspored.listaCelija)
                         {
                             if (celija.red == int.Parse(poljeTagova[1]) && celija.stupac == int.Parse(poljeTagova[2]))
                             {
@@ -67,14 +67,16 @@ namespace Transportni_problem
                                     richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);
                                     richTextBox.DeselectAll();
                                 }
-                                
+                                break;
                             }
                         }
                     }
-                    //TODO else if (poljeTagova[0] == "Sum") onda desti boju npr u crveno, ali prvo izracunati sumu
-                    //TODO rjesiti problem s panelom
                     else
                     {
+                        if (poljeTagova[0] == "Sum")
+                        {
+                            richTextBox.Text = pocetniRaspored.sumaAi.ToString();
+                        }
                         richTextBox.SelectAll();
                         richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);
                     }
