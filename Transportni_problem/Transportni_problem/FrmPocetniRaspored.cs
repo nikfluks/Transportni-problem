@@ -23,12 +23,9 @@ namespace Transportni_problem
             pnlPocetniRaspored = pnlMatricaTroskova;
             pnlPocetniRaspored.Location = new Point(20, 20);
 
-            this.Controls.Add(pnlPocetniRaspored);
-
             if (odabraniPocetniRaspored == "SjeveroZpadniKut")
             {
                 pocetniRaspored.SjeveroZapadniKut();
-                PrikaziPocetniRaspored();
             }
 
             else if (odabraniPocetniRaspored == "MinTrosak")
@@ -40,11 +37,16 @@ namespace Transportni_problem
             {
                 pocetniRaspored.Vogel();
             }
+
+            PrikaziPocetniRaspored();
+            this.Controls.Add(pnlPocetniRaspored);
         }
 
         private void PrikaziPocetniRaspored()
         {
             string[] poljeTagova = new string[3];
+            string ukupniMinTrosakString = "Z = ";
+            double ukupniMinTrosak = 0;
 
             foreach (Control kontrola in pnlPocetniRaspored.Controls)
             {
@@ -66,6 +68,9 @@ namespace Transportni_problem
                                     richTextBox.SelectionLength = richTextBox.TextLength;
                                     richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);
                                     richTextBox.DeselectAll();
+
+                                    ukupniMinTrosakString += "(" + celija.stvarniTrosak + " * " + celija.kolicinaTereta + ")" + " + ";//za ispis min troska
+                                    ukupniMinTrosak += celija.stvarniTrosak * celija.kolicinaTereta;//racunanje min troska
                                 }
                                 break;
                             }
@@ -83,6 +88,16 @@ namespace Transportni_problem
 
                 }
             }
+
+            ukupniMinTrosakString = ukupniMinTrosakString.Remove(ukupniMinTrosakString.Length - 2);
+            ukupniMinTrosakString += " = " + ukupniMinTrosak;
+
+            Label ukupniMinTrosakLabela = new Label();
+            ukupniMinTrosakLabela.Text = ukupniMinTrosakString;
+            ukupniMinTrosakLabela.Location = new Point(pnlPocetniRaspored.Location.X, pnlPocetniRaspored.Location.Y + pnlPocetniRaspored.Height + 20);
+            ukupniMinTrosakLabela.AutoSize = true;
+
+            pnlPocetniRaspored.Controls.Add(ukupniMinTrosakLabela);//ispis min troska
         }
     }
 }
