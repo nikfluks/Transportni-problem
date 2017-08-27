@@ -173,7 +173,87 @@ namespace Transportni_problem
 
         public void Vogel()
         {
+            double Ai = 0;
+            double Bj = 0;
+            double sumaKolicinePoRedu;
+            double sumaKolicinePoStupcu;
+            bool prviProlaz = true;
 
+            List<double> listaIndexaPoStupcu = new List<double>();
+            List<double> listaIndexaPoRedu = new List<double>();
+
+            List<double> listaRedova = new List<double>();
+
+            foreach (Celija celijaRed in listaCelija)
+            {
+                int r = celijaRed.red;
+                int s = celijaRed.stupac;
+
+                if (celijaRed.opis == "Obicna")
+                {
+                    foreach (Celija celija in listaCelija)
+                    {
+                        if (celija.opis == "Obicna" && celija.red == r && celija.stupac != s) 
+                        {
+
+                        }
+                    }
+                }
+            }
+
+            foreach (Celija obicnaCelija in listaCelija)
+            {
+                sumaKolicinePoRedu = 0;
+                sumaKolicinePoStupcu = 0;
+
+                if (obicnaCelija.opis == "Obicna")
+                {
+                    foreach (Celija celija in listaCelija)
+                    {
+                        if (celija.opis == "Ai" && celija.red == obicnaCelija.red)//trazimo kapacitet ishodista za taj red
+                        {
+                            Ai = celija.stvarniTrosak;
+                        }
+
+                        if (celija.opis == "Bj" && celija.stupac == obicnaCelija.stupac)//trazimo potrebe odredista za taj stupac
+                        {
+                            Bj = celija.stvarniTrosak;
+                        }
+
+                        if (celija.opis == "Obicna" && celija.red == obicnaCelija.red)
+                        {
+                            sumaKolicinePoRedu += celija.kolicinaTereta;
+                        }
+
+                        if (celija.opis == "Obicna" && celija.stupac == obicnaCelija.stupac)
+                        {
+                            sumaKolicinePoStupcu += celija.kolicinaTereta;
+                        }
+
+                        if (prviProlaz && celija.opis == "Ai")
+                        {
+                            sumaAi += celija.stvarniTrosak;
+                        }
+                    }
+
+                    prviProlaz = false;
+
+                    if (Bj < Ai - sumaKolicinePoRedu)
+                    {
+                        obicnaCelija.kolicinaTereta = Bj;
+                    }
+
+                    else
+                    {
+                        obicnaCelija.kolicinaTereta = Ai - sumaKolicinePoRedu;
+                    }
+
+                    if (obicnaCelija.kolicinaTereta > Bj - sumaKolicinePoStupcu)
+                    {
+                        obicnaCelija.kolicinaTereta = Bj - sumaKolicinePoStupcu;
+                    }
+                }
+            }
         }
     }
 }
