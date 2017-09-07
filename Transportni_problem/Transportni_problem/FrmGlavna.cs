@@ -12,6 +12,7 @@ namespace Transportni_problem
 {
     public partial class FrmGlavna : Form
     {
+        Panel pnlMatricaTroska = null;
         public FrmGlavna()
         {
             InitializeComponent();
@@ -41,144 +42,25 @@ namespace Transportni_problem
                 return;
             }
 
-            pnlMatricaTroskova.Controls.Clear();
+            if (pnlMatricaTroska!=null)
+            {
+                pnlMatricaTroska.Dispose();
+            }
 
-            NacrtajRetke();
-            NacrtajStupce();
-            NacrtajCelije();
+            CrtanjeMatrice crtanje = new CrtanjeMatrice(brojIshodista, brojOdredista);
+            pnlMatricaTroska = crtanje.NacrtajMatricu();
+            pnlMatricaTroska.Location = new Point(25, 122);
+            pnlMatricaTroska.TabIndex = 4;
+            pnlMatricaTroska.TabStop = true;
+            this.Controls.Add(pnlMatricaTroska);
 
             PrikaziMetodeZaPocetniRaspored();
             PrikaziGumbZaPocetniRaspored();
-
-        }
-
-        private void NacrtajRetke()
-        {
-            int y = 55;
-
-            for (int i = 1; i <= brojIshodista; i++)
-            {
-                Label labelaI = new Label();
-                labelaI.Text = "I" + i;
-                labelaI.Location = new Point(10, y);
-                labelaI.Size = new Size(30, 15);
-                //labelaI.Font = new Font(labelaI.Font.FontFamily, 15, FontStyle.Bold);
-                y += 45;
-
-                pnlMatricaTroskova.Controls.Add(labelaI);
-            }
-
-            Label labelaIs = new Label();
-            labelaIs.Text = "Bj";
-            labelaIs.Location = new Point(10, y + 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
-            labelaIs.Size = new Size(30, 15);
-
-            if (pnlMatricaTroskova.Height < y)//ako je panel pre niski, povecamo ga
-            {
-                pnlMatricaTroskova.Height = y + 45;
-            }
-
-            pnlMatricaTroskova.Controls.Add(labelaIs);
-        }
-
-        private void NacrtajStupce()
-        {
-            int x = 60;
-
-            for (int i = 1; i <= brojOdredista; i++)
-            {
-                Label labelaO = new Label();
-                labelaO.Text = "O" + i;
-                labelaO.Location = new Point(x, 10);
-                labelaO.Size = new Size(30, 15);
-                x += 65;
-
-                pnlMatricaTroskova.Controls.Add(labelaO);
-            }
-
-            Label labelaOd = new Label();
-            labelaOd.Text = "Ai";
-            labelaOd.Location = new Point(x + 10, 10); //+10 je radi estetike da bude razmak izmedu obicnih celija
-            labelaOd.Size = new Size(30, 15);
-
-            if (pnlMatricaTroskova.Width < x)//ako je panel pre uski, povecamo ga
-            {
-                pnlMatricaTroskova.Width = x + 65;
-            }
-
-            pnlMatricaTroskova.Controls.Add(labelaOd);
-        }
-
-        private void NacrtajCelije()
-        {
-            int x = 40;
-            int y = 40;
-            
-            for (int i = 1; i <= brojIshodista + 1; i++)//broj ishodišta/redova, +1 je za Bj
-            {
-                bool zadnji = false;
-
-                for (int j = 1; j <= brojOdredista + 1; j++)//broj odredišta/stupaca, +1 je za Ai
-                {
-                    RichTextBox celija = new RichTextBox();
-
-                    if (i == brojIshodista + 1 && j == brojOdredista + 1)//provjera je li trenutna celija zadnja
-                    {
-                        celija.Tag = "Sum-" + i + "-" + j;
-                        celija.ReadOnly = true;
-                        x += 10;
-                    }
-
-                    else if (i == brojIshodista + 1)//provjera je li redak zadnji
-                    {
-                        celija.Tag = "Bj-" + i + "-" + j;
-
-                        if (!zadnji)
-                        {
-                            zadnji = true;
-                            y += 10;
-                        }
-                    }
-
-                    else if (j == brojOdredista + 1)//provjera je li stupac zadnji
-                    {
-                        celija.Tag = "Ai-" + i + "-" + j;
-
-                        if (!zadnji)
-                        {
-                            zadnji = true;
-                            x += 10;
-                        }
-                    }
-
-                    else//sve ostale celije
-                    {
-                        celija.Tag = "Obicna-" + i + "-" + j;
-                    }
-
-                    celija.Location = new Point(x, y);
-                    celija.Size = new Size(60, 40);
-                    celija.Multiline = true;
-
-                    pnlMatricaTroskova.Controls.Add(celija);
-
-                    if (j == brojOdredista + 1) //ako smo dosli do kraja reda, prebacujemo se u novi red
-                    {
-                        x = 40;
-                        y += 45;
-                    }
-
-                    else //inace se samo pomicemo udesno
-                    {
-                        x += 65;
-                    }
-                }
-            }
         }
 
         private void PrikaziMetodeZaPocetniRaspored()
         {
-            groupOdabirPocetnogRasporeda.Location = new Point(25, pnlMatricaTroskova.Location.Y + pnlMatricaTroskova.Height + 20);
+            groupOdabirPocetnogRasporeda.Location = new Point(25, pnlMatricaTroska.Location.Y + pnlMatricaTroska.Height + 20);
             groupOdabirPocetnogRasporeda.Visible = true;
         }
 
@@ -194,7 +76,7 @@ namespace Transportni_problem
             double stvarniTrosak;
             string[] poljeTagova = new string[3];
 
-            foreach (Control kontrola in pnlMatricaTroskova.Controls)
+            foreach (Control kontrola in pnlMatricaTroska.Controls)
             {
                 if (typeof(RichTextBox) == kontrola.GetType())
                 {
@@ -255,12 +137,12 @@ namespace Transportni_problem
             /*Panel pnlPocetniRaspored = new Panel();
             pnlPocetniRaspored = pnlMatricaTroskova;*/
 
-            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, pnlMatricaTroskova, brojIshodista, brojOdredista);
+            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored/*, pnlMatricaTroska*/, brojIshodista, brojOdredista);
             frmPocetniRaspored.ShowDialog();
 
-            pnlMatricaTroskova.Location = new Point(25, 122);
+            //pnlMatricaTroskova.Location = new Point(25, 122);
             //this.Controls.Remove(pnlMatricaTroskova);
-            this.Controls.Add(pnlMatricaTroskova);
+            //this.Controls.Add(pnlMatricaTroskova);
         }
     }
 }

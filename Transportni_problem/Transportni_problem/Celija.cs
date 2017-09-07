@@ -13,6 +13,7 @@ namespace Transportni_problem
         public int stupac;
         public double stvarniTrosak;
         public double kolicinaTereta;
+        public double maxKolicinaTereta;//maksimalna kolicina tereta koju celija moze prenesti kod Vogela kada imamo vise najmanjih troskova
         //public double relativniTrosak;
 
         public Celija(string opis, int red, int stupac, double stvarniTrosak)

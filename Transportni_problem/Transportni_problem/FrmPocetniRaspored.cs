@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,14 +14,20 @@ namespace Transportni_problem
     public partial class FrmPocetniRaspored : Form
     {
         PocetniRaspored pocetniRaspored = null;
-        Panel pnlPocetniRaspored;
+        Panel pnlPocetniRaspored = null;
 
-        public FrmPocetniRaspored(List<Celija> listaCelija, string odabraniPocetniRaspored, Panel pnlMatricaTroskova, int brojIshodista, int brojOdredista)
+        public FrmPocetniRaspored(List<Celija> listaCelija, string odabraniPocetniRaspored/*, Panel pnlMatricaTroskova*/, int brojIshodista, int brojOdredista)
         {
             InitializeComponent();
-
             pocetniRaspored = new PocetniRaspored(listaCelija, brojIshodista, brojOdredista);
-            pnlPocetniRaspored = pnlMatricaTroskova;
+
+            if (pnlPocetniRaspored != null)
+            {
+                pnlPocetniRaspored.Dispose();
+            }
+
+            CrtanjeMatrice crtanje = new CrtanjeMatrice(brojIshodista, brojOdredista);
+            pnlPocetniRaspored = crtanje.NacrtajMatricu();
             pnlPocetniRaspored.Location = new Point(20, 20);
 
             if (odabraniPocetniRaspored == "SjeveroZpadniKut")
@@ -55,37 +62,42 @@ namespace Transportni_problem
                     RichTextBox richTextBox = (RichTextBox)kontrola;
                     poljeTagova = richTextBox.Tag.ToString().Split('-');
 
-                    if (poljeTagova[0] == "Obicna")
+                    foreach (Celija celija in pocetniRaspored.listaCelija)
                     {
-                        foreach (Celija celija in pocetniRaspored.listaCelija)
+                        if (celija.red == int.Parse(poljeTagova[1]) && celija.stupac == int.Parse(poljeTagova[2]))
                         {
-                            if (celija.red == int.Parse(poljeTagova[1]) && celija.stupac == int.Parse(poljeTagova[2]))
+                            richTextBox.ReadOnly = true;
+                            if (poljeTagova[0] == "Obicna")
                             {
+                                richTextBox.Text = celija.stvarniTrosak.ToString();//obicnim celijama dodajemo stvarni trosak
                                 if (celija.kolicinaTereta != 0)
                                 {
-                                    richTextBox.Text += "   " + celija.kolicinaTereta;
+                                    richTextBox.Text += "   " + celija.kolicinaTereta;//i ako im je kolicina tereta !=0 dodajemo razmake i tu kolicinu tereta
                                     richTextBox.SelectionStart = 4;
-                                    richTextBox.SelectionLength = richTextBox.TextLength;
-                                    richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);
-                                    richTextBox.DeselectAll();
+                                    richTextBox.SelectionLength = richTextBox.TextLength - 4;
+                                    richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);//te na kraju kolicinu tereta povecamo
 
                                     ukupniMinTrosakString += "(" + celija.stvarniTrosak + " * " + celija.kolicinaTereta + ")" + " + ";//za ispis min troska
                                     ukupniMinTrosak += celija.stvarniTrosak * celija.kolicinaTereta;//racunanje min troska
                                 }
-                                break;
                             }
+                            else
+                            {
+                                if (poljeTagova[0] == "Sum")
+                                {
+                                    richTextBox.Text = pocetniRaspored.sumaAi.ToString();
+                                }
+                                else//Ai i Bj celije
+                                {
+                                    richTextBox.Text = celija.stvarniTrosak.ToString();
+                                }
+                                richTextBox.SelectAll();
+                                richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);
+                            }
+                            richTextBox.DeselectAll();
+                            break;
                         }
                     }
-                    else
-                    {
-                        if (poljeTagova[0] == "Sum")
-                        {
-                            richTextBox.Text = pocetniRaspored.sumaAi.ToString();
-                        }
-                        richTextBox.SelectAll();
-                        richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);
-                    }
-
                 }
             }
 
@@ -94,7 +106,7 @@ namespace Transportni_problem
 
             Label ukupniMinTrosakLabela = new Label();
             ukupniMinTrosakLabela.Text = ukupniMinTrosakString;
-            ukupniMinTrosakLabela.Location = new Point(pnlPocetniRaspored.Location.X, pnlPocetniRaspored.Location.Y + pnlPocetniRaspored.Height + 20);
+            ukupniMinTrosakLabela.Location = new Point(pnlPocetniRaspored.Location.X, pnlPocetniRaspored.Location.Y + pnlPocetniRaspored.Height);
             ukupniMinTrosakLabela.AutoSize = true;
 
             pnlPocetniRaspored.Controls.Add(ukupniMinTrosakLabela);//ispis min troska
