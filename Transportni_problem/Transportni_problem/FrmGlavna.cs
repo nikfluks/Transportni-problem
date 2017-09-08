@@ -13,15 +13,23 @@ namespace Transportni_problem
     public partial class FrmGlavna : Form
     {
         Panel pnlMatricaTroska = null;
+        List<Celija> listaCelija = null;
+        int brojIshodista;
+        int brojOdredista;
+
         public FrmGlavna()
         {
             InitializeComponent();
-            groupOdabirPocetnogRasporeda.Visible = false;
-            btnPrikaziPocetniRaspored.Visible = false;
         }
 
-        int brojIshodista;
-        int brojOdredista;
+        private void FrmGlavna_Load(object sender, EventArgs e)
+        {
+            groupOdabirPocetnogRasporeda.Visible = false;
+            btnPrikaziPocetniRaspored.Visible = false;
+            groupOdabirOptimizacije.Visible = false;
+            btnPrikaziOptimalnoRjesenje.Visible = false;
+            listaCelija = new List<Celija>();
+        }
 
         private void btnKreirajPraznuTablicu_Click(object sender, EventArgs e)
         {
@@ -70,9 +78,21 @@ namespace Transportni_problem
             btnPrikaziPocetniRaspored.Visible = true;
         }
 
+        private void PrikaziMetodeZaOptimizaciju()
+        {
+            groupOdabirOptimizacije.Location = new Point(25, btnPrikaziPocetniRaspored.Location.Y + btnPrikaziPocetniRaspored.Height + 20);
+            groupOdabirOptimizacije.Visible = true;
+        }
+
+        private void PrikaziGumbZaOptimizaciju()
+        {
+            btnPrikaziOptimalnoRjesenje.Location = new Point(25, groupOdabirOptimizacije.Location.Y + groupOdabirOptimizacije.Height + 20);
+            btnPrikaziOptimalnoRjesenje.Visible = true;
+        }
+
         private void btnPrikaziPocetniRaspored_Click(object sender, EventArgs e)
         {
-            List<Celija> listaCelija = new List<Celija>();
+            listaCelija.Clear();
             double stvarniTrosak;
             string[] poljeTagova = new string[3];
 
@@ -136,6 +156,33 @@ namespace Transportni_problem
 
             FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, brojIshodista, brojOdredista);
             frmPocetniRaspored.ShowDialog();
+
+            PrikaziMetodeZaOptimizaciju();
+            PrikaziGumbZaOptimizaciju();
+        }
+
+        private void btnPrikaziOptimalnoRjesenje_Click(object sender, EventArgs e)
+        {
+            string odabranaMetodaZaOptimizaciju = "";
+
+            if (radioMODI.Checked)
+            {
+                odabranaMetodaZaOptimizaciju = "MODI metoda";
+            }
+
+            else if (radioKamen.Checked)
+            {
+                odabranaMetodaZaOptimizaciju = "Metoda s kamena na kamen";
+            }
+
+            else
+            {
+                MessageBox.Show("Niste odabrani metodu za početni optimizaciju!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            FrmOptimizacija frmOptimizacija = new FrmOptimizacija(listaCelija, odabranaMetodaZaOptimizaciju, brojIshodista, brojOdredista);
+            frmOptimizacija.ShowDialog();
         }
     }
 }

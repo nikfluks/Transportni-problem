@@ -70,12 +70,19 @@
     <Compile Include="FrmGlavna.Designer.cs">
       <DependentUpon>FrmGlavna.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmOptimizacija.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmOptimizacija.Designer.cs">
+      <DependentUpon>FrmOptimizacija.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmPocetniRaspored.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FrmPocetniRaspored.Designer.cs">
       <DependentUpon>FrmPocetniRaspored.cs</DependentUpon>
     </Compile>
+    <Compile Include="Optimizacija.cs" />
     <Compile Include="PocetniRaspored.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,6 +90,9 @@
     <Compile Include="Vogel.cs" />
     <EmbeddedResource Include="FrmGlavna.resx">
       <DependentUpon>FrmGlavna.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmOptimizacija.resx">
+      <DependentUpon>FrmOptimizacija.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmPocetniRaspored.resx">
       <DependentUpon>FrmPocetniRaspored.cs</DependentUpon>

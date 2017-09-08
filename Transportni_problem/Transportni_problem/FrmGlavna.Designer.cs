@@ -39,7 +39,13 @@
             this.radioVogel = new System.Windows.Forms.RadioButton();
             this.groupOdabirPocetnogRasporeda = new System.Windows.Forms.GroupBox();
             this.btnPrikaziPocetniRaspored = new System.Windows.Forms.Button();
+            this.groupOdabirOptimizacije = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.radioMODI = new System.Windows.Forms.RadioButton();
+            this.radioKamen = new System.Windows.Forms.RadioButton();
+            this.btnPrikaziOptimalnoRjesenje = new System.Windows.Forms.Button();
             this.groupOdabirPocetnogRasporeda.SuspendLayout();
+            this.groupOdabirOptimizacije.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -140,7 +146,7 @@
             this.groupOdabirPocetnogRasporeda.Controls.Add(this.radioVogel);
             this.groupOdabirPocetnogRasporeda.Controls.Add(this.radioSZKut);
             this.groupOdabirPocetnogRasporeda.Controls.Add(this.radioMinTros);
-            this.groupOdabirPocetnogRasporeda.Location = new System.Drawing.Point(25, 232);
+            this.groupOdabirPocetnogRasporeda.Location = new System.Drawing.Point(28, 184);
             this.groupOdabirPocetnogRasporeda.Name = "groupOdabirPocetnogRasporeda";
             this.groupOdabirPocetnogRasporeda.Size = new System.Drawing.Size(280, 171);
             this.groupOdabirPocetnogRasporeda.TabIndex = 5;
@@ -150,7 +156,7 @@
             // btnPrikaziPocetniRaspored
             // 
             this.btnPrikaziPocetniRaspored.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnPrikaziPocetniRaspored.Location = new System.Drawing.Point(25, 431);
+            this.btnPrikaziPocetniRaspored.Location = new System.Drawing.Point(28, 383);
             this.btnPrikaziPocetniRaspored.Name = "btnPrikaziPocetniRaspored";
             this.btnPrikaziPocetniRaspored.Size = new System.Drawing.Size(183, 28);
             this.btnPrikaziPocetniRaspored.TabIndex = 6;
@@ -158,13 +164,72 @@
             this.btnPrikaziPocetniRaspored.UseVisualStyleBackColor = true;
             this.btnPrikaziPocetniRaspored.Click += new System.EventHandler(this.btnPrikaziPocetniRaspored_Click);
             // 
+            // groupOdabirOptimizacije
+            // 
+            this.groupOdabirOptimizacije.Controls.Add(this.label4);
+            this.groupOdabirOptimizacije.Controls.Add(this.radioMODI);
+            this.groupOdabirOptimizacije.Controls.Add(this.radioKamen);
+            this.groupOdabirOptimizacije.Location = new System.Drawing.Point(28, 436);
+            this.groupOdabirOptimizacije.Name = "groupOdabirOptimizacije";
+            this.groupOdabirOptimizacije.Size = new System.Drawing.Size(280, 136);
+            this.groupOdabirOptimizacije.TabIndex = 7;
+            this.groupOdabirOptimizacije.TabStop = false;
+            this.groupOdabirOptimizacije.Text = "Odabir metode za optimizaciju";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label4.Location = new System.Drawing.Point(20, 31);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(209, 16);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Odaberite metodu za optimizaciju:";
+            // 
+            // radioMODI
+            // 
+            this.radioMODI.AutoSize = true;
+            this.radioMODI.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioMODI.Location = new System.Drawing.Point(23, 61);
+            this.radioMODI.Name = "radioMODI";
+            this.radioMODI.Size = new System.Drawing.Size(102, 19);
+            this.radioMODI.TabIndex = 13;
+            this.radioMODI.TabStop = true;
+            this.radioMODI.Text = "MODI metoda";
+            this.radioMODI.UseVisualStyleBackColor = true;
+            // 
+            // radioKamen
+            // 
+            this.radioKamen.AutoSize = true;
+            this.radioKamen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioKamen.Location = new System.Drawing.Point(23, 93);
+            this.radioKamen.Name = "radioKamen";
+            this.radioKamen.Size = new System.Drawing.Size(182, 19);
+            this.radioKamen.TabIndex = 14;
+            this.radioKamen.TabStop = true;
+            this.radioKamen.Text = "Metoda s kamena na kamen";
+            this.radioKamen.UseVisualStyleBackColor = true;
+            // 
+            // btnPrikaziOptimalnoRjesenje
+            // 
+            this.btnPrikaziOptimalnoRjesenje.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btnPrikaziOptimalnoRjesenje.Location = new System.Drawing.Point(28, 593);
+            this.btnPrikaziOptimalnoRjesenje.Name = "btnPrikaziOptimalnoRjesenje";
+            this.btnPrikaziOptimalnoRjesenje.Size = new System.Drawing.Size(183, 28);
+            this.btnPrikaziOptimalnoRjesenje.TabIndex = 8;
+            this.btnPrikaziOptimalnoRjesenje.Text = "Prikaži optimalno rješenje";
+            this.btnPrikaziOptimalnoRjesenje.UseVisualStyleBackColor = true;
+            this.btnPrikaziOptimalnoRjesenje.Click += new System.EventHandler(this.btnPrikaziOptimalnoRjesenje_Click);
+            // 
             // FrmGlavna
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(463, 497);
+            this.ClientSize = new System.Drawing.Size(463, 633);
+            this.Controls.Add(this.btnPrikaziOptimalnoRjesenje);
+            this.Controls.Add(this.groupOdabirOptimizacije);
             this.Controls.Add(this.btnPrikaziPocetniRaspored);
             this.Controls.Add(this.groupOdabirPocetnogRasporeda);
             this.Controls.Add(this.btnKreirajPraznuTablicu);
@@ -176,8 +241,11 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Transportni problem";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.FrmGlavna_Load);
             this.groupOdabirPocetnogRasporeda.ResumeLayout(false);
             this.groupOdabirPocetnogRasporeda.PerformLayout();
+            this.groupOdabirOptimizacije.ResumeLayout(false);
+            this.groupOdabirOptimizacije.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,6 +264,11 @@
         private System.Windows.Forms.RadioButton radioVogel;
         private System.Windows.Forms.GroupBox groupOdabirPocetnogRasporeda;
         private System.Windows.Forms.Button btnPrikaziPocetniRaspored;
+        private System.Windows.Forms.GroupBox groupOdabirOptimizacije;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.RadioButton radioMODI;
+        private System.Windows.Forms.RadioButton radioKamen;
+        private System.Windows.Forms.Button btnPrikaziOptimalnoRjesenje;
     }
 }
 
