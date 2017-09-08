@@ -16,7 +16,7 @@ namespace Transportni_problem
         double Bj = 0;
         double sumaKolicinePoRedu = 0;
         double sumaKolicinePoStupcu = 0;
-        List<ProvjereniVogel> listaRjesenih = new List<ProvjereniVogel>();
+        List<ProvjereniRjesenost> listaRjesenih = new List<ProvjereniRjesenost>();
         bool prviProlaz = true;
         Celija zadnjaCelija = null;
 
@@ -47,19 +47,34 @@ namespace Transportni_problem
 
         public void MinTrosak()
         {
+            listaRjesenih.Clear();
             List<Celija> listaCelijaSortirana = listaCelija.OrderBy(x => x.stvarniTrosak).ToList();
 
-            foreach (Celija obicnaCelija in listaCelijaSortirana)//idemo po svim celija, pocevsi od one s najmanjim troskom
+            foreach (Celija obicnaCelija in listaCelijaSortirana)//uzimamo redom sve celije, pocevsi od one s najmanjim troskom
             {
-                if (obicnaCelija.opis == "Obicna")
+                if (obicnaCelija.opis == "Obicna" && !ProvjeriJeLiCelijaRjesena(obicnaCelija))
                 {
-                    ZapisiKolicinuTereta(obicnaCelija);
+                    //u listaNajmanjihTrosokva spremamo sve celije koje imaju isti trosak kao i promatrana celija
+                    List<Celija> listaNajmanjihTrosokva = listaCelijaSortirana.FindAll(x => x.stvarniTrosak == obicnaCelija.stvarniTrosak);
+                    Celija najmanjiTrosak;
+
+                    if (listaNajmanjihTrosokva.Count == 1)//ako je samo jedna celija s najmanji troskom, uzmemo ju
+                    {
+                        najmanjiTrosak = listaNajmanjihTrosokva[0];
+                    }
+                    else//ako ih je vise, uzimamo onu koja moze prenijeti najvise tereta
+                    {
+                        najmanjiTrosak = PronadiNajveciTeret(listaNajmanjihTrosokva);
+                    }
+                    ZapisiKolicinuTereta(najmanjiTrosak);
+                    ProvjeriRjesenostCelije(najmanjiTrosak);
                 }
             }
         }
 
         public void Vogel()
         {
+            listaRjesenih.Clear();
             for (int i = 0; i < brojIshodista + brojOdredista - 1; i++)
             {
                 List<Vogel> listaNajvecihIndeksa = PronadiNajveciIndeks();
@@ -86,7 +101,7 @@ namespace Transportni_problem
                 }
 
                 ZapisiKolicinuTereta(najmanjiTrosak);
-                ProvjeriRjesenostVogela(najmanjiTrosak);
+                ProvjeriRjesenostCelije(najmanjiTrosak);
             }
         }
 
@@ -193,19 +208,21 @@ namespace Transportni_problem
             return listaNajmanjihTroskova[0];
         }
 
-        //metoda provjerava jesu li potroseni kapaciteti ishodista ili zadovoljene potrebe odredista, ako jesu dodaje ih u listu rjesenih stupaca/redaka
-        public void ProvjeriRjesenostVogela(Celija najmanjiTrosak)
+        //metoda provjerava jesu li potroseni kapaciteti ishodista u redu u kojem se nalazi celija u koju smo upravo upisali kolicinu tereta
+        //i provjerava jesu zadovoljene potrebe odredista u stupcu u kojem se nalazi celija u koju smo upravo upisali kolicinu tereta
+        //ako je nesto od toga istina, celija se dodaje u listu rjesenih celija
+        public void ProvjeriRjesenostCelije(Celija najmanjiTrosak)
         {
             if (najmanjiTrosak.kolicinaTereta + sumaKolicinePoRedu == Ai)
             {
-                ProvjereniVogel rjeseni = new ProvjereniVogel(true, true, najmanjiTrosak.red);//true=red,true=rjeseni,broj reda
-                listaRjesenih.Add(rjeseni);
+                ProvjereniRjesenost rjeseniRed = new ProvjereniRjesenost(true, true, najmanjiTrosak.red);//true=red,true=rjeseni,broj reda
+                listaRjesenih.Add(rjeseniRed);
             }
 
             if (najmanjiTrosak.kolicinaTereta + sumaKolicinePoStupcu == Bj)
             {
-                ProvjereniVogel rjeseni = new ProvjereniVogel(false, true, najmanjiTrosak.stupac);//false=stupac,true=rjeseni,broj stupca
-                listaRjesenih.Add(rjeseni);
+                ProvjereniRjesenost rjeseniStupac = new ProvjereniRjesenost(false, true, najmanjiTrosak.stupac);//false=stupac,true=rjeseni,broj stupca
+                listaRjesenih.Add(rjeseniStupac);
             }
         }
 
@@ -288,21 +305,23 @@ namespace Transportni_problem
             return listaNajvecihIndeksa;
         }
 
+        //metoda provjera je li celija rjesena
+        //a celija je rjesena ako se nalazi u listi rjesenih redova/stupaca
         public bool ProvjeriJeLiCelijaRjesena(Celija celijaZaProvjeru)
         {
-            foreach (ProvjereniVogel provjera in listaRjesenih)
+            foreach (ProvjereniRjesenost provjera in listaRjesenih)
             {
-                if (provjera.red == true)
+                if (provjera.red == true)//red je vec rjeseni
                 {
-                    if (provjera.brojRedaIliStupca == celijaZaProvjeru.red)
+                    if (provjera.brojRedaIliStupca == celijaZaProvjeru.red)//ako je celija u rjesenom redu, vrati true
                     {
                         return true;
                     }
                 }
 
-                else
+                else//stupac je vec rjeseni
                 {
-                    if (provjera.brojRedaIliStupca == celijaZaProvjeru.stupac)
+                    if (provjera.brojRedaIliStupca == celijaZaProvjeru.stupac)//ako je celija u rjesenom stupcu, vrati true
                     {
                         return true;
                     }

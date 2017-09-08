@@ -30,7 +30,7 @@ namespace Transportni_problem
                 brojIshodista = int.Parse(txtBrojIshodista.Text);
                 brojOdredista = int.Parse(txtBrojOdredista.Text);
 
-                if (brojIshodista <= 0 || brojOdredista <= 0) 
+                if (brojIshodista <= 0 || brojOdredista <= 0)
                 {
                     MessageBox.Show("Pogrešan unos!" + Environment.NewLine + "Niste unijeli pozitivan broj!", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
@@ -42,7 +42,7 @@ namespace Transportni_problem
                 return;
             }
 
-            if (pnlMatricaTroska!=null)
+            if (pnlMatricaTroska != null)
             {
                 pnlMatricaTroska.Dispose();
             }
@@ -115,12 +115,12 @@ namespace Transportni_problem
 
             if (radioSZKut.Checked)
             {
-                odabraniPocetniRaspored = "SjeveroZpadniKut";
+                odabraniPocetniRaspored = "Sjeverozapadni kut";
             }
 
             else if (radioMinTros.Checked)
             {
-                odabraniPocetniRaspored = "MinTrosak";
+                odabraniPocetniRaspored = "Minimalni troškovi";
             }
 
             else if (radioVogel.Checked)
@@ -134,15 +134,8 @@ namespace Transportni_problem
                 return;
             }
 
-            /*Panel pnlPocetniRaspored = new Panel();
-            pnlPocetniRaspored = pnlMatricaTroskova;*/
-
-            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored/*, pnlMatricaTroska*/, brojIshodista, brojOdredista);
+            FrmPocetniRaspored frmPocetniRaspored = new FrmPocetniRaspored(listaCelija, odabraniPocetniRaspored, brojIshodista, brojOdredista);
             frmPocetniRaspored.ShowDialog();
-
-            //pnlMatricaTroskova.Location = new Point(25, 122);
-            //this.Controls.Remove(pnlMatricaTroskova);
-            //this.Controls.Add(pnlMatricaTroskova);
         }
     }
 }

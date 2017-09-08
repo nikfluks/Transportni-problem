@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace Transportni_problem
 {
-    public class ProvjereniVogel
+    //klasa sluzi za provjeru je li odredeni red/stupac rjesen kod Vogela i min troskova
+    public class ProvjereniRjesenost
     {
         public bool red;
         public bool rjeseni = false;
         public int brojRedaIliStupca;
 
-        public ProvjereniVogel(bool red, bool rjeseni, int brojRedaIliStupca)
+        public ProvjereniRjesenost(bool red, bool rjeseni, int brojRedaIliStupca)
         {
             this.red = red;
             this.rjeseni = rjeseni;

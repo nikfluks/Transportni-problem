@@ -16,7 +16,7 @@ namespace Transportni_problem
         PocetniRaspored pocetniRaspored = null;
         Panel pnlPocetniRaspored = null;
 
-        public FrmPocetniRaspored(List<Celija> listaCelija, string odabraniPocetniRaspored/*, Panel pnlMatricaTroskova*/, int brojIshodista, int brojOdredista)
+        public FrmPocetniRaspored(List<Celija> listaCelija, string odabraniPocetniRaspored, int brojIshodista, int brojOdredista)
         {
             InitializeComponent();
             pocetniRaspored = new PocetniRaspored(listaCelija, brojIshodista, brojOdredista);
@@ -30,18 +30,21 @@ namespace Transportni_problem
             pnlPocetniRaspored = crtanje.NacrtajMatricu();
             pnlPocetniRaspored.Location = new Point(20, 20);
 
-            if (odabraniPocetniRaspored == "SjeveroZpadniKut")
+            if (odabraniPocetniRaspored == "Sjeverozapadni kut")
             {
+                this.Text += " - " + odabraniPocetniRaspored;
                 pocetniRaspored.SjeveroZapadniKut();
             }
 
-            else if (odabraniPocetniRaspored == "MinTrosak")
+            else if (odabraniPocetniRaspored == "Minimalni troškovi")
             {
+                this.Text += " - " + odabraniPocetniRaspored;
                 pocetniRaspored.MinTrosak();
             }
 
             else if (odabraniPocetniRaspored == "Vogel")
             {
+                this.Text += " - " + odabraniPocetniRaspored;
                 pocetniRaspored.Vogel();
             }
 

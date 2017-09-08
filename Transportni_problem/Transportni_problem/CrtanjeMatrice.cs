@@ -41,7 +41,6 @@ namespace Transportni_problem
                 labelaI.Text = "I" + i;
                 labelaI.Location = new Point(10, y);
                 labelaI.Size = new Size(30, 15);
-                //labelaI.Font = new Font(labelaI.Font.FontFamily, 15, FontStyle.Bold);
                 y += 45;
 
                 pnlMatrica.Controls.Add(labelaI);
