@@ -80,8 +80,7 @@ namespace Transportni_problem
                             {
                                 if (poljeTagova[0] == "Sum")
                                 {
-                                    //TODO!!!!!
-                                    //richTextBox.Text = optimizacija.sumaAi.ToString();
+                                    richTextBox.Text = optimizacija.sumaAi.ToString();
                                 }
                                 else//Ai i Bj celije
                                 {

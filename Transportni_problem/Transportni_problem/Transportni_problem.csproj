@@ -87,7 +87,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvjereniRjesenost.cs" />
-    <Compile Include="Vogel.cs" />
+    <Compile Include="DualnaVarijablaIliIndeks.cs" />
     <EmbeddedResource Include="FrmGlavna.resx">
       <DependentUpon>FrmGlavna.cs</DependentUpon>
     </EmbeddedResource>

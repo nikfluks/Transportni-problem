@@ -14,7 +14,9 @@ namespace Transportni_problem
         public double stvarniTrosak;
         public double kolicinaTereta;
         public double maxKolicinaTereta;//maksimalna kolicina tereta koju celija moze prenesti kod Vogela kada imamo vise najmanjih troskova
-        //public double relativniTrosak;
+        public double relativniTrosak;
+        public bool dobarPut = true; //na pocetku predpostavimo da su sve celije na dobrom putu kada trazimo zatvoreni put MODI metodom
+        public bool plus = false;
 
         public Celija(string opis, int red, int stupac, double stvarniTrosak)
         {
@@ -22,6 +24,22 @@ namespace Transportni_problem
             this.red = red;
             this.stupac = stupac;
             this.stvarniTrosak = stvarniTrosak;
+        }
+
+        public override bool Equals(object obj)
+        {
+            Celija celija = obj as Celija;
+            if (celija.opis == opis && celija.red == red && celija.stupac == stupac && celija.stvarniTrosak == stvarniTrosak && celija.kolicinaTereta == kolicinaTereta
+                && celija.maxKolicinaTereta == maxKolicinaTereta && celija.relativniTrosak == relativniTrosak && celija.dobarPut == dobarPut && celija.plus == plus)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

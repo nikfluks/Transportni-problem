@@ -77,7 +77,7 @@ namespace Transportni_problem
             listaRjesenih.Clear();
             for (int i = 0; i < brojIshodista + brojOdredista - 1; i++)
             {
-                List<Vogel> listaNajvecihIndeksa = PronadiNajveciIndeks();
+                List<DualnaVarijablaIliIndeks> listaNajvecihIndeksa = IzracunajNajveciIndeks();
 
                 //ako zadnja celija vise nije null, dosli smo do zadnje celije i samo trebamo za nju izracunati kolicinu tereta i zavrsavamo
                 //isto bi bilo i if(listaNajvecihIndeksa.Count == 0) jer dobivamo praznu listu
@@ -226,9 +226,9 @@ namespace Transportni_problem
             }
         }
 
-        public List<Vogel> PronadiNajveciIndeks()
+        public List<DualnaVarijablaIliIndeks> IzracunajNajveciIndeks()
         {
-            List<Vogel> listaIndeksa = new List<Vogel>();
+            List<DualnaVarijablaIliIndeks> listaIndeksa = new List<DualnaVarijablaIliIndeks>();
 
             List<Celija> listaCelijaPoRedu = new List<Celija>();
             List<Celija> listaCelijaPoStupcu = new List<Celija>();
@@ -244,18 +244,18 @@ namespace Transportni_problem
                     pronadenIndeksPoStupcu = false;
                     if (listaIndeksa.Count != 0)//ako lista indexa nije prazna, provjeriti je li za trenutnu celiju vec izracunat indeks po redu/stupcu 
                     {
-                        foreach (Vogel vogel in listaIndeksa)
+                        foreach (DualnaVarijablaIliIndeks indeks in listaIndeksa)
                         {
-                            if (vogel.red == true)
+                            if (indeks.red == true)
                             {
-                                if (vogel.brojRedaIliStupca == obicnaCelija.red)//za taj red je vec pronaden indeks
+                                if (indeks.brojRedaIliStupca == obicnaCelija.red)//za taj red je vec pronaden indeks
                                 {
                                     pronadenIndeksPoRedu = true;
                                 }
                             }
                             else
                             {
-                                if (vogel.brojRedaIliStupca == obicnaCelija.stupac)//za taj stupac je vec pronaden indeks
+                                if (indeks.brojRedaIliStupca == obicnaCelija.stupac)//za taj stupac je vec pronaden indeks
                                 {
                                     pronadenIndeksPoStupcu = true;
                                 }
@@ -282,14 +282,14 @@ namespace Transportni_problem
                     if (listaCelijaPoStupcu.Count > 1)
                     {
                         listaCelijaPoStupcu = listaCelijaPoStupcu.OrderBy(x => x.stvarniTrosak).ToList();
-                        Vogel noviIndeksStupac = new Vogel(false, obicnaCelija.stupac, listaCelijaPoStupcu[1].stvarniTrosak - listaCelijaPoStupcu[0].stvarniTrosak);//false=stupac,broj stupca, indeks
+                        DualnaVarijablaIliIndeks noviIndeksStupac = new DualnaVarijablaIliIndeks(false, obicnaCelija.stupac, listaCelijaPoStupcu[1].stvarniTrosak - listaCelijaPoStupcu[0].stvarniTrosak);//false=stupac,broj stupca, indeks
                         listaIndeksa.Add(noviIndeksStupac);
                     }
 
                     if (listaCelijaPoRedu.Count > 1)
                     {
                         listaCelijaPoRedu = listaCelijaPoRedu.OrderBy(x => x.stvarniTrosak).ToList();//tu listu sortiramo te dobimo 2 najmanja troska na prve 2 pozicije liste
-                        Vogel noviIndeksRed = new Vogel(true, obicnaCelija.red, listaCelijaPoRedu[1].stvarniTrosak - listaCelijaPoRedu[0].stvarniTrosak);//true=red, broj reda, indeks
+                        DualnaVarijablaIliIndeks noviIndeksRed = new DualnaVarijablaIliIndeks(true, obicnaCelija.red, listaCelijaPoRedu[1].stvarniTrosak - listaCelijaPoRedu[0].stvarniTrosak);//true=red, broj reda, indeks
                         listaIndeksa.Add(noviIndeksRed);
                     }
 
@@ -300,8 +300,8 @@ namespace Transportni_problem
                     }
                 }
             }
-            listaIndeksa = listaIndeksa.OrderByDescending(x => x.indeks).ToList();
-            List<Vogel> listaNajvecihIndeksa = listaIndeksa.FindAll(x => x.indeks == listaIndeksa[0].indeks);
+            listaIndeksa = listaIndeksa.OrderByDescending(x => x.vrijednost).ToList();
+            List<DualnaVarijablaIliIndeks> listaNajvecihIndeksa = listaIndeksa.FindAll(x => x.vrijednost == listaIndeksa[0].vrijednost);
             return listaNajvecihIndeksa;
         }
 
@@ -330,11 +330,11 @@ namespace Transportni_problem
             return false;
         }
 
-        public List<Celija> PronadiNajmanjiTrosak(List<Vogel> listaNajvecihIndeksa)
+        public List<Celija> PronadiNajmanjiTrosak(List<DualnaVarijablaIliIndeks> listaNajvecihIndeksa)
         {
             List<Celija> listaTroskova = new List<Celija>();
 
-            foreach (Vogel najveciIndeks in listaNajvecihIndeksa)
+            foreach (DualnaVarijablaIliIndeks najveciIndeks in listaNajvecihIndeksa)
             {
                 foreach (Celija celija in listaCelija)
                 {

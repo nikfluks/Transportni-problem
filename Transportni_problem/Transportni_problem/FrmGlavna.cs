@@ -33,6 +33,9 @@ namespace Transportni_problem
 
         private void btnKreirajPraznuTablicu_Click(object sender, EventArgs e)
         {
+            groupOdabirOptimizacije.Visible = false;
+            btnPrikaziOptimalnoRjesenje.Visible = false;
+
             try
             {
                 brojIshodista = int.Parse(txtBrojIshodista.Text);
