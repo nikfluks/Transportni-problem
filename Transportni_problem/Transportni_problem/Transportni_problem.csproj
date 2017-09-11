@@ -84,10 +84,12 @@
     </Compile>
     <Compile Include="Optimizacija.cs" />
     <Compile Include="PocetniRaspored.cs" />
+    <Compile Include="Predznak.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProvjereniRjesenost.cs" />
     <Compile Include="DualnaVarijablaIliIndeks.cs" />
+    <Compile Include="ZatvoreniPut.cs" />
     <EmbeddedResource Include="FrmGlavna.resx">
       <DependentUpon>FrmGlavna.cs</DependentUpon>
     </EmbeddedResource>

@@ -33,8 +33,7 @@ namespace Transportni_problem
 
         private void btnKreirajPraznuTablicu_Click(object sender, EventArgs e)
         {
-            groupOdabirOptimizacije.Visible = false;
-            btnPrikaziOptimalnoRjesenje.Visible = false;
+            SakrilKontroleZaOptimizaciju();
 
             try
             {
@@ -77,19 +76,19 @@ namespace Transportni_problem
 
         private void PrikaziGumbZaPocetniRaspored()
         {
-            btnPrikaziPocetniRaspored.Location = new Point(25, groupOdabirPocetnogRasporeda.Location.Y + groupOdabirPocetnogRasporeda.Height + 20);
+            btnPrikaziPocetniRaspored.Location = new Point(25, groupOdabirPocetnogRasporeda.Location.Y + groupOdabirPocetnogRasporeda.Height + 10);
             btnPrikaziPocetniRaspored.Visible = true;
         }
 
         private void PrikaziMetodeZaOptimizaciju()
         {
-            groupOdabirOptimizacije.Location = new Point(25, btnPrikaziPocetniRaspored.Location.Y + btnPrikaziPocetniRaspored.Height + 20);
+            groupOdabirOptimizacije.Location = new Point(25, btnPrikaziPocetniRaspored.Location.Y + btnPrikaziPocetniRaspored.Height + 30);
             groupOdabirOptimizacije.Visible = true;
         }
 
         private void PrikaziGumbZaOptimizaciju()
         {
-            btnPrikaziOptimalnoRjesenje.Location = new Point(25, groupOdabirOptimizacije.Location.Y + groupOdabirOptimizacije.Height + 20);
+            btnPrikaziOptimalnoRjesenje.Location = new Point(25, groupOdabirOptimizacije.Location.Y + groupOdabirOptimizacije.Height + 10);
             btnPrikaziOptimalnoRjesenje.Visible = true;
         }
 
@@ -186,6 +185,27 @@ namespace Transportni_problem
 
             FrmOptimizacija frmOptimizacija = new FrmOptimizacija(listaCelija, odabranaMetodaZaOptimizaciju, brojIshodista, brojOdredista);
             frmOptimizacija.ShowDialog();
+        }
+
+        private void radioSZKut_CheckedChanged(object sender, EventArgs e)
+        {
+            SakrilKontroleZaOptimizaciju();
+        }
+
+        private void radioMinTros_CheckedChanged(object sender, EventArgs e)
+        {
+            SakrilKontroleZaOptimizaciju();
+        }
+
+        private void radioVogel_CheckedChanged(object sender, EventArgs e)
+        {
+            SakrilKontroleZaOptimizaciju();
+        }
+
+        private void SakrilKontroleZaOptimizaciju()
+        {
+            groupOdabirOptimizacije.Visible = false;
+            btnPrikaziOptimalnoRjesenje.Visible = false;
         }
     }
 }

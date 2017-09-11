@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +16,6 @@ namespace Transportni_problem
         int brojIshodista;
         int brojOdredista;
         List<DualnaVarijablaIliIndeks> listaDualnihVarijabli = new List<DualnaVarijablaIliIndeks>();
-        Celija najmanjaMinusCelija = null;
 
         public Optimizacija(List<Celija> listaCelija, int brojIshodista, int brojOdredista)
         {
@@ -25,39 +26,111 @@ namespace Transportni_problem
 
         public void MODI()
         {
-            while (true)
+            bool pronadenoOptimalnoRjesenje = false;
+
+            while (!pronadenoOptimalnoRjesenje)
             {
                 listaDualnihVarijabli.Clear();
-                PostaviRelativniTrosak(); 
-                DualnaVarijablaIliIndeks prvaDualnaVarijabla = new DualnaVarijablaIliIndeks(true, 1, 0);//postavili smo U1 = 0
-                listaDualnihVarijabli.Add(prvaDualnaVarijabla);
+                PostaviRelativniTrosak();
+                IsprazniListuPluseva();
+                ProvjeriKolicinuTereta();//da maknem kolicinu -1 koju sam namjerno postavil i vratim ju na 0
 
                 IzracunajDualneVarijable();
                 IzracunajRelativneTroskove();
-                Celija celijaSNjavecimRelativnimTroskom = PronadiNajveciRelativniTrosak();
+                List<Celija> listaCelijaSNjavecimRelativnimTroskom = PronadiNajveciPozitivniRelativniTrosak();
 
-                if (celijaSNjavecimRelativnimTroskom.relativniTrosak > 0)
+                if (listaCelijaSNjavecimRelativnimTroskom != null)//ako je lista != null znaci da imamo barem 1 pozitivni relativni trosak
                 {
-                    List<Celija> listaCelijaNaZatvorenomPutu = PronadiZatvoreniPut(celijaSNjavecimRelativnimTroskom);
-                    PronadiNajmanjiMinusBroj(listaCelijaNaZatvorenomPutu);
-                    PreraspodjeliTeret(listaCelijaNaZatvorenomPutu);
+                    //pronalazimo sve zatvorene puteve (ako imamo vise celija s najvecim poz rel troskom, imamo i vise zatvorenih puteva)
+                    List<ZatvoreniPut> listaZatvorenihPuteva = PronadiZatvoreniPut(listaCelijaSNjavecimRelativnimTroskom);
+                    ZatvoreniPut zatvoreniPutSMaxTeret;
+
+                    if (listaZatvorenihPuteva.Count == 1)//postoji samo 1 najveci poz rel trosak, pa postoji i samo 1 zatvoreni put
+                    {
+                        zatvoreniPutSMaxTeret = listaZatvorenihPuteva[0];
+                    }
+                    else//inace imamo vise zatvorenih puteva, pa treba naci zatvoreni put koji moze prenijeti najvise tereta
+                    {
+                        zatvoreniPutSMaxTeret = PronadiNajveciTeret(listaZatvorenihPuteva);
+                    }
+                    PreraspodjeliTeret(zatvoreniPutSMaxTeret);
                 }
-                //else if == 0 znaci da ima jos optimalnih rjesenja 
-                else return;
+
+                else//ako je lista == null onda je(su) najveci relativnim trosak negativni, pa tu zavrsava MODI metoda
+                {
+                    pronadenoOptimalnoRjesenje = true;
+                }
+            }
+        }
+
+        //metoda iz liste zatvorenih puteva, trazi onaj zatvoreni put na kojem mozemo prenijeti najvise tereta
+        public ZatvoreniPut PronadiNajveciTeret(List<ZatvoreniPut> listaZatvorenihPuteva)
+        {
+            List<Celija> listaCelijaNaMinusPoljima = new List<Celija>();
+
+            foreach (ZatvoreniPut zatvoreniPut in listaZatvorenihPuteva)
+            {
+                listaCelijaNaMinusPoljima.Clear();
+
+                foreach (Celija celija in zatvoreniPut.listaCelijaNaZatvorenomPutu)
+                {
+                    foreach (Predznak predznak in celija.predznak)
+                    {
+                        if (predznak.plus == false && predznak.redniBrojZatvorenogPuta == zatvoreniPut.redniBrojZatvorenogPuta)
+                        {
+                            listaCelijaNaMinusPoljima.Add(celija);
+                        }
+                    }
+                }
+                zatvoreniPut.maxKolicinaTereta = listaCelijaNaMinusPoljima.OrderBy(x => x.kolicinaTereta).First().kolicinaTereta;
+            }
+
+            ZatvoreniPut zatvoreniPutSMaxTeret = listaZatvorenihPuteva.OrderByDescending(x => x.maxKolicinaTereta).First();
+            return zatvoreniPutSMaxTeret;
+        }
+
+        public void IsprazniListuPluseva()
+        {
+            foreach (Celija celija in listaCelija)
+            {
+                celija.predznak.Clear();
             }
         }
 
         public void PostaviRelativniTrosak()
         {
-            //svim celijama postavljamo vrijednost relativnih troškova na neutralnu vrijednost, a to je bilo koji negativni broj
+            //na pocetku svim celijama postavljamo vrijednost relativnih troškova na neutralnu vrijednost, a to je bilo koji negativni broj
             foreach (Celija celija in listaCelija)
             {
                 celija.relativniTrosak = -1;
             }
         }
 
+        public void PostaviDobarPut()
+        {
+            //na pocetku svim celijama postavljamo oznaku da su na dobrom putu
+            foreach (Celija celija in listaCelija)
+            {
+                celija.dobarPut = true;
+            }
+        }
+
+        public void ProvjeriKolicinuTereta()
+        {
+            foreach (Celija celija in listaCelija)
+            {
+                if (celija.kolicinaTereta == -1)
+                {
+                    celija.kolicinaTereta = 0;
+                }
+            }
+        }
+
         public void IzracunajDualneVarijable()
         {
+            DualnaVarijablaIliIndeks prvaDualnaVarijabla = new DualnaVarijablaIliIndeks(true, 1, 0);//postavili smo U1 = 0
+            listaDualnihVarijabli.Add(prvaDualnaVarijabla);
+
             double vrijednostNoveDualneVarijable;
 
             //tako dugo trazimo dualne varijable dok ih nema brojIshodista + brojOdredista
@@ -81,8 +154,8 @@ namespace Transportni_problem
                                     if (!listaDualnihVarijabli.Contains(novaDualnaVarijabla))
                                     {
                                         listaDualnihVarijabli.Add(novaDualnaVarijabla);//novu dualnu varijablu dodajemo u listu
+                                        break;
                                     }
-
                                 }
                             }
                             else//ako je dualna varijabla u stupcu
@@ -96,6 +169,7 @@ namespace Transportni_problem
                                     if (!listaDualnihVarijabli.Contains(novaDualnaVarijabla))
                                     {
                                         listaDualnihVarijabli.Add(novaDualnaVarijabla);//novu dualnu varijablu dodajemo u listu
+                                        break;
                                     }
                                 }
                             }
@@ -141,107 +215,155 @@ namespace Transportni_problem
             }
         }
 
-        public Celija PronadiNajveciRelativniTrosak()
+        public List<Celija> PronadiNajveciPozitivniRelativniTrosak()
         {
+            //sortiramo listu tako da su na početku celije s najvecim relativnim troskom
             List<Celija> sortiranaListaCelija = listaCelija.OrderByDescending(x => x.relativniTrosak).ToList();
-            return sortiranaListaCelija[0];
-        }
 
-        public List<Celija> PronadiZatvoreniPut(Celija celijaSNjavecimRelativnimTroskom)
-        {
-            List<Celija> listaCelijaNaZatvorenomPutu = new List<Celija>();
-            celijaSNjavecimRelativnimTroskom.plus = true;
-            celijaSNjavecimRelativnimTroskom.kolicinaTereta = -1;//namjerno stavljam ovdje -1, iako to nije bas pravilni nacin
-            listaCelijaNaZatvorenomPutu.Add(celijaSNjavecimRelativnimTroskom);
-
-            bool red = true;
-            bool postojiCelijaUStupcuIliRetku = false;
-
-            while (true)
+            if (sortiranaListaCelija[0].relativniTrosak > 0)//provjeravamo ima li celija s najvecim relativnim troskom pozitivan relativni trosak
             {
-                postojiCelijaUStupcuIliRetku = false;
-                foreach (Celija celija in listaCelija)
-                {
-                    if (red == true)
-                    {
-                        //zapocinjemo traziti zatvoreni put s celijom koja je u istom redu kao i celijaSNjavecimRelativnimTroskom (listaCelijaNaZAtvorenomPutu.Last()) i ta celija mora imati kolicinuTereta != 0
-                        //celija koja je u istom redu s zadnje dodanom celijom ne smije biti ona sama te mora biti oznacena kao celija na dobrom putu
-                        if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.kolicinaTereta != 0 && celija.red == listaCelijaNaZatvorenomPutu.Last().red && celija.dobarPut)
-                        {
-                            if (listaCelijaNaZatvorenomPutu.Contains(celija))
-                            {
-                                return listaCelijaNaZatvorenomPutu;
-                            }
-                            celija.plus = false;
-                            listaCelijaNaZatvorenomPutu.Add(celija);
-                            postojiCelijaUStupcuIliRetku = true;
-                            red = !red;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.kolicinaTereta != 0 && celija.stupac == listaCelijaNaZatvorenomPutu.Last().stupac && celija.dobarPut)
-                        {
-                            if (listaCelijaNaZatvorenomPutu.Contains(celija))
-                            {
-                                return listaCelijaNaZatvorenomPutu;
-                            }
-                            celija.plus = true;
-                            listaCelijaNaZatvorenomPutu.Add(celija);
-                            postojiCelijaUStupcuIliRetku = true;
-                            red = !red;
-                            break;
-                        }
-                    }
-                }
-
-                if (!postojiCelijaUStupcuIliRetku)
-                {
-                    red = !red;
-                    listaCelijaNaZatvorenomPutu.Last().dobarPut = false;
-                    listaCelijaNaZatvorenomPutu.Remove(listaCelijaNaZatvorenomPutu.Last());
-
-                }
+                //odaberemo sve celije koje imaju najveci relativni trosak (moze ih biti 1 ili vise)
+                List<Celija> listaCelijaSNjavecimRelativnimTroskom = sortiranaListaCelija.FindAll(x => x.relativniTrosak == sortiranaListaCelija[0].relativniTrosak);
+                //vratimo listu gdje se nalaze samo celije s najvecim relativnim troskom
+                return listaCelijaSNjavecimRelativnimTroskom;
+            }
+            //TODO else if sortiranaListaCelija[0].relativniTrosak == 0, imamo vise optimlanih rjesenja -> postaviti neku globalnu varijablu 
+            else
+            {
+                return null;
             }
         }
 
-        public void PronadiNajmanjiMinusBroj(List<Celija> listaCelijaNaZatvorenomPutu)
+        public List<ZatvoreniPut> PronadiZatvoreniPut(List<Celija> listaCelijaSNjavecimRelativnimTroskom)
+        {
+            List<ZatvoreniPut> listaZatvorenihPuteva = new List<ZatvoreniPut>();
+            int redniBrojZatvorenogPuta = 0;
+
+            foreach (Celija celijaSNjavecimRelativnimTroskom in listaCelijaSNjavecimRelativnimTroskom)
+            {
+                PostaviDobarPut();
+                List<Celija> listaCelijaNaZatvorenomPutu = new List<Celija>();
+
+                Predznak novi1 = new Predznak(true, redniBrojZatvorenogPuta);
+                celijaSNjavecimRelativnimTroskom.predznak.Add(novi1);
+                celijaSNjavecimRelativnimTroskom.kolicinaTereta = -1;//namjerno stavljam ovdje -1, iako to nije bas pravilni nacin
+                listaCelijaNaZatvorenomPutu.Add(celijaSNjavecimRelativnimTroskom);
+
+                bool red = true;
+                bool postojiCelijaUStupcuIliRetku = false;
+                bool pronadenzatvoreniPut = false;
+
+                while (!pronadenzatvoreniPut)
+                {
+                    postojiCelijaUStupcuIliRetku = false;
+                    foreach (Celija celija in listaCelija)
+                    {
+                        if (red == true)
+                        {
+                            //zapocinjemo traziti zatvoreni put s celijom koja je u istom redu kao i celijaSNjavecimRelativnimTroskom (listaCelijaNaZAtvorenomPutu.Last()) i ta celija mora imati kolicinuTereta != 0
+                            //celija koja je u istom redu s zadnje dodanom celijom ne smije biti ona sama te mora biti oznacena kao celija na dobrom putu
+                            if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.kolicinaTereta != 0 && celija.red == listaCelijaNaZatvorenomPutu.Last().red && celija.dobarPut)
+                            {
+                                postojiCelijaUStupcuIliRetku = true;
+
+                                if (listaCelijaNaZatvorenomPutu.Contains(celija))//vratili smo se do celijaSNjavecimRelativnimTroskom, tj nasli smo zatvoreni put
+                                {
+                                    pronadenzatvoreniPut = true;
+                                    ZatvoreniPut noviZatvoreniPut = new ZatvoreniPut(listaCelijaNaZatvorenomPutu, redniBrojZatvorenogPuta);
+                                    listaZatvorenihPuteva.Add(noviZatvoreniPut);
+                                    redniBrojZatvorenogPuta++;
+                                    break;//jer smo nasli zatvoreni put
+                                }
+
+                                Predznak novi2 = new Predznak(false, redniBrojZatvorenogPuta);
+                                celija.predznak.Add(novi2);
+                                listaCelijaNaZatvorenomPutu.Add(celija);
+                                red = !red;
+                                break;//cisto radi toga da se krene od prve celije (1,1)
+                            }
+                        }
+                        else
+                        {
+                            if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.kolicinaTereta != 0 && celija.stupac == listaCelijaNaZatvorenomPutu.Last().stupac && celija.dobarPut)
+                            {
+                                postojiCelijaUStupcuIliRetku = true;
+
+                                if (listaCelijaNaZatvorenomPutu.Contains(celija))
+                                {
+                                    pronadenzatvoreniPut = true;
+                                    ZatvoreniPut noviZatvoreniPut = new ZatvoreniPut(listaCelijaNaZatvorenomPutu, redniBrojZatvorenogPuta);
+                                    listaZatvorenihPuteva.Add(noviZatvoreniPut);
+                                    redniBrojZatvorenogPuta++;
+                                    break;
+                                }
+
+                                Predznak novi3 = new Predznak(true, redniBrojZatvorenogPuta);
+                                celija.predznak.Add(novi3);
+                                listaCelijaNaZatvorenomPutu.Add(celija);
+                                red = !red;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!postojiCelijaUStupcuIliRetku)//brise zadnje dodanu celiju ako nije na dobro putu, tj preko nje se ne moze niti do jedne druge zauzete celije
+                    {
+                        red = !red;
+                        listaCelijaNaZatvorenomPutu.Last().dobarPut = false;
+                        listaCelijaNaZatvorenomPutu.Last().predznak.Clear();
+                        listaCelijaNaZatvorenomPutu.Remove(listaCelijaNaZatvorenomPutu.Last());
+
+                    }
+                }
+            }
+            return listaZatvorenihPuteva;
+        }
+
+        public Celija PronadiNajmanjuMinusCeliju(ZatvoreniPut zatvoreniPutSMaxTeret)
         {
             List<Celija> listaMinusCelija = new List<Celija>();
 
-            foreach (Celija celija in listaCelijaNaZatvorenomPutu)
+            foreach (Celija celija in zatvoreniPutSMaxTeret.listaCelijaNaZatvorenomPutu)
             {
-                if (celija.plus == false)//trazimo celije koje su oznacene kao minus
+                foreach (Predznak predznak in celija.predznak)
                 {
-                    listaMinusCelija.Add(celija);
+                    if (predznak.plus == false && predznak.redniBrojZatvorenogPuta == zatvoreniPutSMaxTeret.redniBrojZatvorenogPuta)
+                    {
+                        listaMinusCelija.Add(celija);
+                    }
                 }
             }
 
-            listaMinusCelija = listaMinusCelija.OrderBy(x => x.kolicinaTereta).ToList();
-            najmanjaMinusCelija = listaMinusCelija[0];//najmanja minus celija se nalazi prva u sortiranoj listi
+            //List<Celija> listaMinusCelija = zatvoreniPutSMaxTeret.listaCelijaNaZatvorenomPutu.FindAll(x => x.plus.FindAll(y => y.plus == false));
+            listaMinusCelija = listaMinusCelija.OrderBy(x => x.kolicinaTereta).ToList();//ako ima vise najmanjih minus celija -> DEGENERACIJA
+            return listaMinusCelija[0];//najmanja minus celija se nalazi prva u sortiranoj listi
         }
 
-        public void PreraspodjeliTeret(List<Celija> listaCelijaNaZatvorenomPutu)
+        public void PreraspodjeliTeret(ZatvoreniPut zatvoreniPutSMaxTeret)
         {
+            Celija najmanjaMinusCelija = PronadiNajmanjuMinusCeliju(zatvoreniPutSMaxTeret);
+
             double kolicinaTeretaZaPremjestanje = najmanjaMinusCelija.kolicinaTereta;
 
-            foreach (Celija celija in listaCelijaNaZatvorenomPutu)
+            foreach (Celija celija in zatvoreniPutSMaxTeret.listaCelijaNaZatvorenomPutu)
             {
-                if (celija.plus == true)
+                foreach (Predznak predznak in celija.predznak)
                 {
-                    if (celija.kolicinaTereta == -1)//to je celija s najvecim relativnim troskom, kojoj sam namjerno stavil -1 za kolicinu tereta, a zapravo je ta kolicina bila 0
+                    if (predznak.plus == true && predznak.redniBrojZatvorenogPuta == zatvoreniPutSMaxTeret.redniBrojZatvorenogPuta)
                     {
-                        celija.kolicinaTereta += kolicinaTeretaZaPremjestanje + 1;
+                        if (celija.kolicinaTereta == -1)//to je celija s najvecim relativnim troskom, kojoj sam namjerno stavil -1 za kolicinu tereta, a zapravo je ta kolicina bila 0
+                        {
+                            celija.kolicinaTereta += kolicinaTeretaZaPremjestanje + 1;
+                        }
+                        else
+                        {
+                            celija.kolicinaTereta += kolicinaTeretaZaPremjestanje;
+                        }
                     }
-                    else
+                    else if(predznak.plus == false && predznak.redniBrojZatvorenogPuta == zatvoreniPutSMaxTeret.redniBrojZatvorenogPuta)
                     {
-                        celija.kolicinaTereta += kolicinaTeretaZaPremjestanje;
+                        celija.kolicinaTereta -= kolicinaTeretaZaPremjestanje;
                     }
-                }
-                else
-                {
-                    celija.kolicinaTereta -= kolicinaTeretaZaPremjestanje;
                 }
             }
         }

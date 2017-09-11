@@ -24,7 +24,7 @@ namespace Transportni_problem
         public override bool Equals(object obj)
         {
             DualnaVarijablaIliIndeks dualnaVarijabla = obj as DualnaVarijablaIliIndeks;
-            if (dualnaVarijabla.red == red && dualnaVarijabla.brojRedaIliStupca == brojRedaIliStupca && dualnaVarijabla.vrijednost == vrijednost)
+            if (dualnaVarijabla.red == red && dualnaVarijabla.brojRedaIliStupca == brojRedaIliStupca /*&& dualnaVarijabla.vrijednost == vrijednost*/)
             {
                 return true;
             }

@@ -88,7 +88,7 @@
             this.btnKreirajPraznuTablicu.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btnKreirajPraznuTablicu.Location = new System.Drawing.Point(220, 25);
             this.btnKreirajPraznuTablicu.Name = "btnKreirajPraznuTablicu";
-            this.btnKreirajPraznuTablicu.Size = new System.Drawing.Size(184, 69);
+            this.btnKreirajPraznuTablicu.Size = new System.Drawing.Size(159, 69);
             this.btnKreirajPraznuTablicu.TabIndex = 3;
             this.btnKreirajPraznuTablicu.Text = "Kreiraj matricu troškova";
             this.btnKreirajPraznuTablicu.UseVisualStyleBackColor = true;
@@ -110,11 +110,12 @@
             this.radioSZKut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.radioSZKut.Location = new System.Drawing.Point(23, 61);
             this.radioSZKut.Name = "radioSZKut";
-            this.radioSZKut.Size = new System.Drawing.Size(183, 19);
+            this.radioSZKut.Size = new System.Drawing.Size(190, 19);
             this.radioSZKut.TabIndex = 13;
             this.radioSZKut.TabStop = true;
-            this.radioSZKut.Text = "Metoda sjeverozapdnog kuta";
+            this.radioSZKut.Text = "Metoda sjeverozapadnog kuta";
             this.radioSZKut.UseVisualStyleBackColor = true;
+            this.radioSZKut.CheckedChanged += new System.EventHandler(this.radioSZKut_CheckedChanged);
             // 
             // radioMinTros
             // 
@@ -127,6 +128,7 @@
             this.radioMinTros.TabStop = true;
             this.radioMinTros.Text = "Metoda minimalnih troškova";
             this.radioMinTros.UseVisualStyleBackColor = true;
+            this.radioMinTros.CheckedChanged += new System.EventHandler(this.radioMinTros_CheckedChanged);
             // 
             // radioVogel
             // 
@@ -139,6 +141,7 @@
             this.radioVogel.TabStop = true;
             this.radioVogel.Text = "Vogelova aproksimativna metoda";
             this.radioVogel.UseVisualStyleBackColor = true;
+            this.radioVogel.CheckedChanged += new System.EventHandler(this.radioVogel_CheckedChanged);
             // 
             // groupOdabirPocetnogRasporeda
             // 
@@ -148,7 +151,7 @@
             this.groupOdabirPocetnogRasporeda.Controls.Add(this.radioMinTros);
             this.groupOdabirPocetnogRasporeda.Location = new System.Drawing.Point(28, 184);
             this.groupOdabirPocetnogRasporeda.Name = "groupOdabirPocetnogRasporeda";
-            this.groupOdabirPocetnogRasporeda.Size = new System.Drawing.Size(280, 171);
+            this.groupOdabirPocetnogRasporeda.Size = new System.Drawing.Size(280, 162);
             this.groupOdabirPocetnogRasporeda.TabIndex = 5;
             this.groupOdabirPocetnogRasporeda.TabStop = false;
             this.groupOdabirPocetnogRasporeda.Text = "Odabir metode početnog rasporeda";
@@ -156,7 +159,7 @@
             // btnPrikaziPocetniRaspored
             // 
             this.btnPrikaziPocetniRaspored.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnPrikaziPocetniRaspored.Location = new System.Drawing.Point(28, 383);
+            this.btnPrikaziPocetniRaspored.Location = new System.Drawing.Point(28, 352);
             this.btnPrikaziPocetniRaspored.Name = "btnPrikaziPocetniRaspored";
             this.btnPrikaziPocetniRaspored.Size = new System.Drawing.Size(183, 28);
             this.btnPrikaziPocetniRaspored.TabIndex = 6;
@@ -169,9 +172,9 @@
             this.groupOdabirOptimizacije.Controls.Add(this.label4);
             this.groupOdabirOptimizacije.Controls.Add(this.radioMODI);
             this.groupOdabirOptimizacije.Controls.Add(this.radioKamen);
-            this.groupOdabirOptimizacije.Location = new System.Drawing.Point(28, 436);
+            this.groupOdabirOptimizacije.Location = new System.Drawing.Point(28, 412);
             this.groupOdabirOptimizacije.Name = "groupOdabirOptimizacije";
-            this.groupOdabirOptimizacije.Size = new System.Drawing.Size(280, 136);
+            this.groupOdabirOptimizacije.Size = new System.Drawing.Size(280, 128);
             this.groupOdabirOptimizacije.TabIndex = 7;
             this.groupOdabirOptimizacije.TabStop = false;
             this.groupOdabirOptimizacije.Text = "Odabir metode za optimizaciju";
@@ -213,7 +216,7 @@
             // btnPrikaziOptimalnoRjesenje
             // 
             this.btnPrikaziOptimalnoRjesenje.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnPrikaziOptimalnoRjesenje.Location = new System.Drawing.Point(28, 593);
+            this.btnPrikaziOptimalnoRjesenje.Location = new System.Drawing.Point(28, 546);
             this.btnPrikaziOptimalnoRjesenje.Name = "btnPrikaziOptimalnoRjesenje";
             this.btnPrikaziOptimalnoRjesenje.Size = new System.Drawing.Size(183, 28);
             this.btnPrikaziOptimalnoRjesenje.TabIndex = 8;
@@ -227,7 +230,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(463, 633);
+            this.ClientSize = new System.Drawing.Size(464, 631);
             this.Controls.Add(this.btnPrikaziOptimalnoRjesenje);
             this.Controls.Add(this.groupOdabirOptimizacije);
             this.Controls.Add(this.btnPrikaziPocetniRaspored);
