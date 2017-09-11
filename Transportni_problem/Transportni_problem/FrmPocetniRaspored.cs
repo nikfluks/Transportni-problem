@@ -73,7 +73,7 @@ namespace Transportni_problem
                             if (poljeTagova[0] == "Obicna")
                             {
                                 richTextBox.Text = celija.stvarniTrosak.ToString();//obicnim celijama dodajemo stvarni trosak
-                                if (celija.kolicinaTereta != 0)
+                                if (celija.zauzetoPolje == true)
                                 {
                                     richTextBox.Text += "   " + celija.kolicinaTereta;//i ako im je kolicina tereta !=0 dodajemo razmake i tu kolicinu tereta
                                     richTextBox.SelectionStart = 4;

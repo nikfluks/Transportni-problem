@@ -12,6 +12,7 @@ namespace Transportni_problem
     {
         public List<Celija> listaCelija;
         public double sumaAi = 0;
+        public double brojOptimalnihRjesenja;
         bool prviProlaz = true;
         int brojIshodista;
         int brojOdredista;
@@ -33,7 +34,9 @@ namespace Transportni_problem
                 listaDualnihVarijabli.Clear();
                 PostaviRelativniTrosak();
                 IsprazniListuPluseva();
-                ProvjeriKolicinuTereta();//da maknem kolicinu -1 koju sam namjerno postavil i vratim ju na 0
+                ProvjeriZauzetaPolja();
+
+                ProvjeriDegeneraciju();
 
                 IzracunajDualneVarijable();
                 IzracunajRelativneTroskove();
@@ -60,6 +63,63 @@ namespace Transportni_problem
                 {
                     pronadenoOptimalnoRjesenje = true;
                 }
+            }
+
+            PronadiBrojOptimalnihRjesenja();
+        }
+
+        public void PronadiBrojOptimalnihRjesenja()//trazimo broj nula na Cij* poziciji, gledaju se samo nezauzete nule; broj optimalnih rjesenja je 2^brojNula
+        {
+            int brojNula = 0;
+
+            foreach (Celija celija in listaCelija)
+            {
+                if (celija.opis == "Obicna" && celija.zauzetoPolje == false && celija.relativniTrosak == 0)
+                {
+                    brojNula++;
+                }
+            }
+
+            brojOptimalnihRjesenja = Math.Pow(2, brojNula);
+        }
+
+        public int BrojZauzetihPolja()
+        {
+            int brojZauzetihPolja = 0;
+
+            foreach (Celija celija in listaCelija)//trazimo broj zauzetih polja
+            {
+                if (celija.zauzetoPolje == true)
+                {
+                    brojZauzetihPolja++;
+                }
+            }
+
+            return brojZauzetihPolja;
+        }
+
+        public void ProvjeriDegeneraciju()
+        {
+            int brojZauzetihPolja = BrojZauzetihPolja();
+
+            while (brojZauzetihPolja < (brojIshodista + brojOdredista - 1))//trazimo u while petplji za slucaj da nam fali vise od 1 zauzeto polje
+            {
+                //ako je brojZauzetihPolja < (red+stupac-1) tj broj zaueih polja je manji od ranga,
+                //onda imamo degeneraciju pa moramo jos neko polje oznaciti kao zauzeto i dodati mu teret = 0
+                //PREPORUKA je polje s najmanjim troskom oznaciti kao zauzeto
+
+                List<Celija> listaSortiranihCelija = listaCelija.OrderBy(x => x.stvarniTrosak).ToList();
+                foreach (Celija celija in listaSortiranihCelija)
+                {
+                    if (celija.opis == "Obicna" && celija.zauzetoPolje == false)
+                    {
+                        celija.zauzetoPolje = true;
+                        celija.kolicinaTereta = 0;
+                        break;
+                    }
+                }
+
+                brojZauzetihPolja = BrojZauzetihPolja();
             }
         }
 
@@ -115,13 +175,16 @@ namespace Transportni_problem
             }
         }
 
-        public void ProvjeriKolicinuTereta()
+        public void ProvjeriZauzetaPolja()
         {
             foreach (Celija celija in listaCelija)
             {
-                if (celija.kolicinaTereta == -1)
+                if (celija.zauzetoPolje)
                 {
-                    celija.kolicinaTereta = 0;
+                    if (celija.kolicinaTereta <= 0)
+                    {
+                        celija.zauzetoPolje = false;
+                    }
                 }
             }
         }
@@ -139,7 +202,7 @@ namespace Transportni_problem
             {
                 foreach (Celija obicnaCelija in listaCelija)//idemo po svim celijama
                 {
-                    if (obicnaCelija.opis == "Obicna" && obicnaCelija.kolicinaTereta != 0)//gledamo zauzeta polja, tj ona polja kojima je kolicina tereta != 0
+                    if (obicnaCelija.opis == "Obicna" && obicnaCelija.zauzetoPolje == true)//gledamo zauzeta polja, tj ona polja kojima je kolicina tereta != 0
                     {
                         foreach (DualnaVarijablaIliIndeks dualnaVarijabla in listaDualnihVarijabli.ToList())//idemo po svim dualni varijablima
                         {
@@ -191,7 +254,7 @@ namespace Transportni_problem
 
             foreach (Celija obicnaCelija in listaCelija)
             {
-                if (obicnaCelija.opis == "Obicna" && obicnaCelija.kolicinaTereta == 0)
+                if (obicnaCelija.opis == "Obicna" && obicnaCelija.zauzetoPolje == false)
                 {
                     foreach (DualnaVarijablaIliIndeks dualnaVarijabla in listaDualnihVarijabli)
                     {
@@ -246,7 +309,7 @@ namespace Transportni_problem
 
                 Predznak novi1 = new Predznak(true, redniBrojZatvorenogPuta);
                 celijaSNjavecimRelativnimTroskom.predznak.Add(novi1);
-                celijaSNjavecimRelativnimTroskom.kolicinaTereta = -1;//namjerno stavljam ovdje -1, iako to nije bas pravilni nacin
+                celijaSNjavecimRelativnimTroskom.zauzetoPolje = true;
                 listaCelijaNaZatvorenomPutu.Add(celijaSNjavecimRelativnimTroskom);
 
                 bool red = true;
@@ -262,7 +325,7 @@ namespace Transportni_problem
                         {
                             //zapocinjemo traziti zatvoreni put s celijom koja je u istom redu kao i celijaSNjavecimRelativnimTroskom (listaCelijaNaZAtvorenomPutu.Last()) i ta celija mora imati kolicinuTereta != 0
                             //celija koja je u istom redu s zadnje dodanom celijom ne smije biti ona sama te mora biti oznacena kao celija na dobrom putu
-                            if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.kolicinaTereta != 0 && celija.red == listaCelijaNaZatvorenomPutu.Last().red && celija.dobarPut)
+                            if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.zauzetoPolje == true && celija.red == listaCelijaNaZatvorenomPutu.Last().red && celija.dobarPut)
                             {
                                 postojiCelijaUStupcuIliRetku = true;
 
@@ -284,7 +347,7 @@ namespace Transportni_problem
                         }
                         else
                         {
-                            if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.kolicinaTereta != 0 && celija.stupac == listaCelijaNaZatvorenomPutu.Last().stupac && celija.dobarPut)
+                            if (celija != listaCelijaNaZatvorenomPutu.Last() && celija.opis == "Obicna" && celija.zauzetoPolje == true && celija.stupac == listaCelijaNaZatvorenomPutu.Last().stupac && celija.dobarPut)
                             {
                                 postojiCelijaUStupcuIliRetku = true;
 
@@ -351,16 +414,9 @@ namespace Transportni_problem
                 {
                     if (predznak.plus == true && predznak.redniBrojZatvorenogPuta == zatvoreniPutSMaxTeret.redniBrojZatvorenogPuta)
                     {
-                        if (celija.kolicinaTereta == -1)//to je celija s najvecim relativnim troskom, kojoj sam namjerno stavil -1 za kolicinu tereta, a zapravo je ta kolicina bila 0
-                        {
-                            celija.kolicinaTereta += kolicinaTeretaZaPremjestanje + 1;
-                        }
-                        else
-                        {
-                            celija.kolicinaTereta += kolicinaTeretaZaPremjestanje;
-                        }
+                        celija.kolicinaTereta += kolicinaTeretaZaPremjestanje;
                     }
-                    else if(predznak.plus == false && predznak.redniBrojZatvorenogPuta == zatvoreniPutSMaxTeret.redniBrojZatvorenogPuta)
+                    else if (predznak.plus == false && predznak.redniBrojZatvorenogPuta == zatvoreniPutSMaxTeret.redniBrojZatvorenogPuta)
                     {
                         celija.kolicinaTereta -= kolicinaTeretaZaPremjestanje;
                     }

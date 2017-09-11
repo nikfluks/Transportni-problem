@@ -52,7 +52,7 @@ namespace Transportni_problem
 
             foreach (Celija obicnaCelija in listaCelijaSortirana)//uzimamo redom sve celije, pocevsi od one s najmanjim troskom
             {
-                if (obicnaCelija.opis == "Obicna" && !ProvjeriJeLiCelijaRjesena(obicnaCelija))
+                if (obicnaCelija.opis == "Obicna" /*&& !ProvjeriJeLiCelijaRjesena(obicnaCelija)*/)
                 {
                     //u listaNajmanjihTrosokva spremamo sve celije koje imaju isti trosak kao i promatrana celija
                     List<Celija> listaNajmanjihTrosokva = listaCelijaSortirana.FindAll(x => x.stvarniTrosak == obicnaCelija.stvarniTrosak);
@@ -107,51 +107,66 @@ namespace Transportni_problem
 
         public void ZapisiKolicinuTereta(Celija obicnaCelija)
         {
-            sumaKolicinePoRedu = 0;
-            sumaKolicinePoStupcu = 0;
-            foreach (Celija celija in listaCelija)
+            if (obicnaCelija.kolicinaTereta <= 0)
             {
-                if (celija.opis == "Ai" && celija.red == obicnaCelija.red)//trazimo kapacitet ishodista za taj red
+
+
+                sumaKolicinePoRedu = 0;
+                sumaKolicinePoStupcu = 0;
+                foreach (Celija celija in listaCelija)
                 {
-                    Ai = celija.stvarniTrosak;
+                    if (celija.opis == "Ai" && celija.red == obicnaCelija.red)//trazimo kapacitet ishodista za taj red
+                    {
+                        Ai = celija.stvarniTrosak;
+                    }
+
+                    if (celija.opis == "Bj" && celija.stupac == obicnaCelija.stupac)//trazimo potrebe odredista za taj stupac
+                    {
+                        Bj = celija.stvarniTrosak;
+                    }
+
+                    if (celija.opis == "Obicna" && celija.red == obicnaCelija.red)
+                    {
+                        sumaKolicinePoRedu += celija.kolicinaTereta;
+                    }
+
+                    if (celija.opis == "Obicna" && celija.stupac == obicnaCelija.stupac)
+                    {
+                        sumaKolicinePoStupcu += celija.kolicinaTereta;
+                    }
+
+                    //trazimo sumu kapaciteta ishodista
+                    //isto se moze napraviviti i za potrebe odredista i usporediti jesu li te vrijedosti iste (ZTP vs OTP) 
+                    if (prviProlaz && celija.opis == "Ai")
+                    {
+                        sumaAi += celija.stvarniTrosak;
+                    }
+                }
+                prviProlaz = false;
+
+                double trenutniKapacitet = Ai - sumaKolicinePoRedu;//trenutni kapacitet ishodista/retka
+                double trenutnePotrebe = Bj - sumaKolicinePoStupcu;//trenutne potrebe odredista/stupca
+
+                //trazimo manji od ta 2 broja te njega upisujemo kao kolicinu tereta za tu celiju
+                if (trenutniKapacitet < trenutnePotrebe)
+                {
+                    obicnaCelija.kolicinaTereta = trenutniKapacitet;
+
+                    if (trenutniKapacitet > 0)//ako smo u kolicinu upisali neki poz broj, tj broj koji nije 0, oznacimo celiju kao zauzetu
+                    {
+                        obicnaCelija.zauzetoPolje = true;
+                    }
                 }
 
-                if (celija.opis == "Bj" && celija.stupac == obicnaCelija.stupac)//trazimo potrebe odredista za taj stupac
+                else
                 {
-                    Bj = celija.stvarniTrosak;
+                    obicnaCelija.kolicinaTereta = trenutnePotrebe;
+
+                    if (trenutnePotrebe > 0)
+                    {
+                        obicnaCelija.zauzetoPolje = true;
+                    }
                 }
-
-                if (celija.opis == "Obicna" && celija.red == obicnaCelija.red)
-                {
-                    sumaKolicinePoRedu += celija.kolicinaTereta;
-                }
-
-                if (celija.opis == "Obicna" && celija.stupac == obicnaCelija.stupac)
-                {
-                    sumaKolicinePoStupcu += celija.kolicinaTereta;
-                }
-
-                //trazimo sumu kapaciteta ishodista
-                //isto se moze napraviviti i za potrebe odredista i usporediti jesu li te vrijedosti iste (ZTP vs OTP) 
-                if (prviProlaz && celija.opis == "Ai")
-                {
-                    sumaAi += celija.stvarniTrosak;
-                }
-            }
-            prviProlaz = false;
-
-            double trenutniKapacitet = Ai - sumaKolicinePoRedu;//trenutni kapacitet ishodista/retka
-            double trenutnePotrebe = Bj - sumaKolicinePoStupcu;//trenutne potrebe odredista/stupca
-
-            //trazimo manji od ta 2 broja te njega upisujemo kao kolicinu tereta za tu celiju
-            if (trenutniKapacitet < trenutnePotrebe)
-            {
-                obicnaCelija.kolicinaTereta = trenutniKapacitet;
-            }
-
-            else
-            {
-                obicnaCelija.kolicinaTereta = trenutnePotrebe;
             }
         }
 

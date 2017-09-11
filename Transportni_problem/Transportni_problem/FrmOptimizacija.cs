@@ -40,11 +40,11 @@ namespace Transportni_problem
                 optimizacija.Kamen();
             }
 
-            PrikaziPocetniRaspored();
+            PrikaziOptimalnoRjesenje();
             this.Controls.Add(pnlOptimizacija);
         }
 
-        private void PrikaziPocetniRaspored()
+        private void PrikaziOptimalnoRjesenje()
         {
             string[] poljeTagova = new string[3];
             string ukupniMinTrosakString = "Z = ";
@@ -65,7 +65,7 @@ namespace Transportni_problem
                             if (poljeTagova[0] == "Obicna")
                             {
                                 richTextBox.Text = celija.stvarniTrosak.ToString();//obicnim celijama dodajemo stvarni trosak
-                                if (celija.kolicinaTereta != 0)
+                                if (celija.zauzetoPolje == true)
                                 {
                                     richTextBox.Text += "   " + celija.kolicinaTereta;//i ako im je kolicina tereta !=0 dodajemo razmake i tu kolicinu tereta
                                     richTextBox.SelectionStart = 4;
@@ -74,6 +74,10 @@ namespace Transportni_problem
 
                                     ukupniMinTrosakString += "(" + celija.stvarniTrosak + " * " + celija.kolicinaTereta + ")" + " + ";//za ispis min troska
                                     ukupniMinTrosak += celija.stvarniTrosak * celija.kolicinaTereta;//racunanje min troska
+                                }
+                                else
+                                {
+                                    richTextBox.Text += "       " + celija.relativniTrosak;
                                 }
                             }
                             else
@@ -105,6 +109,14 @@ namespace Transportni_problem
             ukupniMinTrosakLabela.AutoSize = true;
 
             pnlOptimizacija.Controls.Add(ukupniMinTrosakLabela);//ispis min troska
+
+            Label brojOptimalnihRjesenjaLabela = new Label();
+            brojOptimalnihRjesenjaLabela.Font = new Font(brojOptimalnihRjesenjaLabela.Font.FontFamily, 12, FontStyle.Bold);
+            brojOptimalnihRjesenjaLabela.Location = new Point(ukupniMinTrosakLabela.Location.X, ukupniMinTrosakLabela.Location.Y + 35);
+            brojOptimalnihRjesenjaLabela.AutoSize = true;
+            brojOptimalnihRjesenjaLabela.Text = "Broj optimalnih rješenja: " + optimizacija.brojOptimalnihRjesenja.ToString();
+            
+            pnlOptimizacija.Controls.Add(brojOptimalnihRjesenjaLabela);//ispis broja optimlanih rjesenja
         }
     }
 }
