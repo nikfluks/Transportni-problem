@@ -41,7 +41,6 @@ namespace Transportni_problem
             }
 
             PrikaziOptimalnoRjesenje();
-            this.Controls.Add(pnlOptimizacija);
         }
 
         private void PrikaziOptimalnoRjesenje()
@@ -117,6 +116,8 @@ namespace Transportni_problem
             brojOptimalnihRjesenjaLabela.Text = "Broj optimalnih rješenja: " + optimizacija.brojOptimalnihRjesenja.ToString();
             
             pnlOptimizacija.Controls.Add(brojOptimalnihRjesenjaLabela);//ispis broja optimlanih rjesenja
+
+            this.Controls.Add(pnlOptimizacija);
         }
     }
 }

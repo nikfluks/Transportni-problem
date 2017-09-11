@@ -207,5 +207,13 @@ namespace Transportni_problem
             groupOdabirOptimizacije.Visible = false;
             btnPrikaziOptimalnoRjesenje.Visible = false;
         }
+
+        private void txtBrojOdredista_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnKreirajPraznuTablicu.PerformClick();
+            }
+        }
     }
 }

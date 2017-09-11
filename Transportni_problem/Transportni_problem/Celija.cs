@@ -18,6 +18,7 @@ namespace Transportni_problem
         public bool dobarPut = true; //na pocetku predpostavimo da su sve celije na dobrom putu kada trazimo zatvoreni put MODI metodom
         public bool zauzetoPolje = false;//oznacimo je li polje zauzeto (kolicina tereta != 0), da bi ih kasnije mogli prebrojiti i odrediti imamo li degeneraciju
         public List<Predznak> predznak = new List<Predznak>();
+        public bool degenerirarana = false;
         
         public Celija(string opis, int red, int stupac, double stvarniTrosak)
         {
@@ -31,7 +32,7 @@ namespace Transportni_problem
         {
             Celija celija = obj as Celija;
             if (celija.opis == opis && celija.red == red && celija.stupac == stupac && celija.stvarniTrosak == stvarniTrosak && celija.kolicinaTereta == kolicinaTereta
-                && celija.maxKolicinaTereta == maxKolicinaTereta && celija.relativniTrosak == relativniTrosak && celija.dobarPut == dobarPut && celija.predznak == predznak)
+                && celija.maxKolicinaTereta == maxKolicinaTereta && celija.relativniTrosak == relativniTrosak && celija.dobarPut == dobarPut && celija.zauzetoPolje == zauzetoPolje)
             {
                 return true;
             }

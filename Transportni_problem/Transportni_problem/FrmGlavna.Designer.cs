@@ -82,6 +82,7 @@
             this.txtBrojOdredista.Name = "txtBrojOdredista";
             this.txtBrojOdredista.Size = new System.Drawing.Size(53, 20);
             this.txtBrojOdredista.TabIndex = 2;
+            this.txtBrojOdredista.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBrojOdredista_KeyDown);
             // 
             // btnKreirajPraznuTablicu
             // 
