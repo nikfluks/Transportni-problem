@@ -67,7 +67,7 @@ namespace Transportni_problem
                         najmanjiTrosak = PronadiNajveciTeret(listaNajmanjihTrosokva);
                     }
                     ZapisiKolicinuTereta(najmanjiTrosak);
-                    ProvjeriRjesenostCelije(najmanjiTrosak);
+                    DodajUListuRjesenih(najmanjiTrosak);
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace Transportni_problem
                 }
 
                 ZapisiKolicinuTereta(najmanjiTrosak);
-                ProvjeriRjesenostCelije(najmanjiTrosak);
+                DodajUListuRjesenih(najmanjiTrosak);
             }
         }
 
@@ -109,8 +109,6 @@ namespace Transportni_problem
         {
             if (obicnaCelija.kolicinaTereta <= 0)
             {
-
-
                 sumaKolicinePoRedu = 0;
                 sumaKolicinePoStupcu = 0;
                 foreach (Celija celija in listaCelija)
@@ -226,7 +224,7 @@ namespace Transportni_problem
         //metoda provjerava jesu li potroseni kapaciteti ishodista u redu u kojem se nalazi celija u koju smo upravo upisali kolicinu tereta
         //i provjerava jesu zadovoljene potrebe odredista u stupcu u kojem se nalazi celija u koju smo upravo upisali kolicinu tereta
         //ako je nesto od toga istina, celija se dodaje u listu rjesenih celija
-        public void ProvjeriRjesenostCelije(Celija najmanjiTrosak)
+        public void DodajUListuRjesenih(Celija najmanjiTrosak)
         {
             if (najmanjiTrosak.kolicinaTereta + sumaKolicinePoRedu == Ai)
             {
@@ -253,7 +251,7 @@ namespace Transportni_problem
 
             foreach (Celija obicnaCelija in listaCelija)//idemo po svim celijama
             {
-                if (obicnaCelija.opis == "Obicna" && !ProvjeriJeLiCelijaRjesena(obicnaCelija))//celija mora biti obicna i ne smije biti u rjesenom redu/stupcu
+                if (obicnaCelija.opis == "Obicna" && !ProvjeriJeLiCelijaUListiRjesenih(obicnaCelija))//celija mora biti obicna i ne smije biti u rjesenom redu/stupcu
                 {
                     pronadenIndeksPoRedu = false;
                     pronadenIndeksPoStupcu = false;
@@ -283,12 +281,12 @@ namespace Transportni_problem
 
                     foreach (Celija celija in listaCelija)//trazimo celije koje su u istom redu/stupcu kao i trenutno gledana celija
                     {
-                        if (!pronadenIndeksPoStupcu && celija.opis == "Obicna" && celija.stupac == obicnaCelija.stupac && !ProvjeriJeLiCelijaRjesena(celija))//ako su u istom stupcu i ako celija nije u rjesenom stupcu dodamo ju u listu stupaca
+                        if (!pronadenIndeksPoStupcu && celija.opis == "Obicna" && celija.stupac == obicnaCelija.stupac && !ProvjeriJeLiCelijaUListiRjesenih(celija))//ako su u istom stupcu i ako celija nije u rjesenom stupcu dodamo ju u listu stupaca
                         {
                             listaCelijaPoStupcu.Add(celija);
                         }
 
-                        if (!pronadenIndeksPoRedu && celija.opis == "Obicna" && celija.red == obicnaCelija.red && !ProvjeriJeLiCelijaRjesena(celija))//ako su u istom redu i ako celija nije u rjesenom redu dodamo ju u listu redova
+                        if (!pronadenIndeksPoRedu && celija.opis == "Obicna" && celija.red == obicnaCelija.red && !ProvjeriJeLiCelijaUListiRjesenih(celija))//ako su u istom redu i ako celija nije u rjesenom redu dodamo ju u listu redova
                         {
                             listaCelijaPoRedu.Add(celija);
                         }
@@ -322,7 +320,7 @@ namespace Transportni_problem
 
         //metoda provjera je li celija rjesena
         //a celija je rjesena ako se nalazi u listi rjesenih redova/stupaca
-        public bool ProvjeriJeLiCelijaRjesena(Celija celijaZaProvjeru)
+        public bool ProvjeriJeLiCelijaUListiRjesenih(Celija celijaZaProvjeru)
         {
             foreach (ProvjereniRjesenost provjera in listaRjesenih)
             {
@@ -355,7 +353,7 @@ namespace Transportni_problem
                 {
                     if (najveciIndeks.red == true)//najveci indeks se nalazi u retku
                     {
-                        if (celija.opis == "Obicna" && celija.red == najveciIndeks.brojRedaIliStupca && !ProvjeriJeLiCelijaRjesena(celija))
+                        if (celija.opis == "Obicna" && celija.red == najveciIndeks.brojRedaIliStupca && !ProvjeriJeLiCelijaUListiRjesenih(celija))
                         {
                             listaTroskova.Add(celija);
                         }
@@ -363,7 +361,7 @@ namespace Transportni_problem
 
                     else//najveci indeks se nalazi u stupcu
                     {
-                        if (celija.opis == "Obicna" && celija.stupac == najveciIndeks.brojRedaIliStupca && !ProvjeriJeLiCelijaRjesena(celija))
+                        if (celija.opis == "Obicna" && celija.stupac == najveciIndeks.brojRedaIliStupca && !ProvjeriJeLiCelijaUListiRjesenih(celija))
                         {
                             listaTroskova.Add(celija);
                         }

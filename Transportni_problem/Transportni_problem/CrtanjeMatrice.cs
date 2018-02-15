@@ -98,22 +98,22 @@ namespace Transportni_problem
 
                 for (int j = 1; j <= brojOdredista + 1; j++)//broj odredišta/stupaca, +1 je za Ai
                 {
-                    RichTextBox celija = new RichTextBox();
-                    celija.Click += delegate
+                    RichTextBox richTextBox = new RichTextBox();
+                    richTextBox.Click += delegate
                     {
-                        celija.SelectAll();
+                        richTextBox.SelectAll();
                     };
 
                     if (i == brojIshodista + 1 && j == brojOdredista + 1)//provjera je li trenutna celija zadnja
                     {
-                        celija.Tag = "Sum-" + i + "-" + j;
-                        celija.ReadOnly = true;
+                        richTextBox.Tag = "Sum-" + i + "-" + j;
+                        richTextBox.ReadOnly = true;
                         x += 10;
                     }
 
                     else if (i == brojIshodista + 1)//provjera je li redak zadnji
                     {
-                        celija.Tag = "Bj-" + i + "-" + j;
+                        richTextBox.Tag = "Bj-" + i + "-" + j;
 
                         if (!zadnji)
                         {
@@ -124,7 +124,7 @@ namespace Transportni_problem
 
                     else if (j == brojOdredista + 1)//provjera je li stupac zadnji
                     {
-                        celija.Tag = "Ai-" + i + "-" + j;
+                        richTextBox.Tag = "Ai-" + i + "-" + j;
 
                         if (!zadnji)
                         {
@@ -135,14 +135,14 @@ namespace Transportni_problem
 
                     else//sve ostale celije
                     {
-                        celija.Tag = "Obicna-" + i + "-" + j;
+                        richTextBox.Tag = "Obicna-" + i + "-" + j;
                     }
 
-                    celija.Location = new Point(x, y);
-                    celija.Size = new Size(60, 40);
-                    celija.Multiline = true;
+                    richTextBox.Location = new Point(x, y);
+                    richTextBox.Size = new Size(60, 40);
+                    richTextBox.Multiline = true;
 
-                    pnlMatrica.Controls.Add(celija);
+                    pnlMatrica.Controls.Add(richTextBox);
 
                     if (j == brojOdredista + 1) //ako smo dosli do kraja reda, prebacujemo se u novi red
                     {

@@ -24,11 +24,16 @@ namespace Transportni_problem
 
         private void FrmGlavna_Load(object sender, EventArgs e)
         {
+            SakrijSveKontrole();
+            listaCelija = new List<Celija>();
+        }
+
+        private void SakrijSveKontrole()
+        {
             groupOdabirPocetnogRasporeda.Visible = false;
             btnPrikaziPocetniRaspored.Visible = false;
             groupOdabirOptimizacije.Visible = false;
             btnPrikaziOptimalnoRjesenje.Visible = false;
-            listaCelija = new List<Celija>();
         }
 
         private void btnKreirajPraznuTablicu_Click(object sender, EventArgs e)

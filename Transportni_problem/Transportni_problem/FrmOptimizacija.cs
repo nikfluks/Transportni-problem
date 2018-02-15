@@ -91,6 +91,7 @@ namespace Transportni_problem
                                 }
                                 richTextBox.SelectAll();
                                 richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);
+                                richTextBox.SelectionAlignment = HorizontalAlignment.Center;
                             }
                             richTextBox.DeselectAll();
                             break;

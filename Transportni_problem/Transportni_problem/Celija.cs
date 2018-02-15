@@ -43,7 +43,5 @@ namespace Transportni_problem
         {
             return base.GetHashCode();
         }
-
-
     }
 }
