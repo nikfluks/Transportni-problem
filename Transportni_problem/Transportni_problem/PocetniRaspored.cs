@@ -17,7 +17,6 @@ namespace Transportni_problem
         double sumaKolicinePoRedu = 0;
         double sumaKolicinePoStupcu = 0;
         List<ProvjereniRjesenost> listaRjesenih = new List<ProvjereniRjesenost>();
-        bool prviProlaz = true;
         Celija zadnjaCelija = null;
 
         public PocetniRaspored(List<Celija> listaCelija, int brojIshodista, int brojOdredista)
@@ -25,6 +24,7 @@ namespace Transportni_problem
             this.listaCelija = listaCelija;
             this.brojIshodista = brojIshodista;
             this.brojOdredista = brojOdredista;
+            IzracunajUkupniKapacitet();
         }
 
         public void SjeveroZapadniKut()
@@ -105,6 +105,19 @@ namespace Transportni_problem
             }
         }
 
+        public void IzracunajUkupniKapacitet()
+        {
+            //trazimo sumu kapaciteta ishodista
+            //isto se moze napraviviti i za potrebe odredista i usporediti jesu li te vrijedosti iste (ZTP vs OTP) 
+            foreach (Celija celija in listaCelija)
+            {
+                if (celija.opis == "Ai")
+                {
+                    sumaAi += celija.stvarniTrosak;
+                }
+            }
+        }
+
         public void ZapisiKolicinuTereta(Celija obicnaCelija)
         {
             if (obicnaCelija.kolicinaTereta <= 0)
@@ -132,15 +145,7 @@ namespace Transportni_problem
                     {
                         sumaKolicinePoStupcu += celija.kolicinaTereta;
                     }
-
-                    //trazimo sumu kapaciteta ishodista
-                    //isto se moze napraviviti i za potrebe odredista i usporediti jesu li te vrijedosti iste (ZTP vs OTP) 
-                    if (prviProlaz && celija.opis == "Ai")
-                    {
-                        sumaAi += celija.stvarniTrosak;
-                    }
                 }
-                prviProlaz = false;
 
                 double trenutniKapacitet = Ai - sumaKolicinePoRedu;//trenutni kapacitet ishodista/retka
                 double trenutnePotrebe = Bj - sumaKolicinePoStupcu;//trenutne potrebe odredista/stupca

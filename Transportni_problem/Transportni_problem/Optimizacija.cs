@@ -13,7 +13,6 @@ namespace Transportni_problem
         public List<Celija> listaCelija;
         public double sumaAi = 0;
         public double brojOptimalnihRjesenja;
-        bool prviProlaz = true;
         int brojIshodista;
         int brojOdredista;
         int redniBrojZatvorenogPutaKamen = 0;
@@ -24,6 +23,7 @@ namespace Transportni_problem
             this.listaCelija = listaCelija;
             this.brojIshodista = brojIshodista;
             this.brojOdredista = brojOdredista;
+            IzracunajUkupniKapacitet();
         }
 
         public void MODI()
@@ -35,9 +35,9 @@ namespace Transportni_problem
                 listaDualnihVarijabli.Clear();
                 PostaviRelativniTrosak();
                 IsprazniListuPredznaka();
-                ProvjeriZauzetaPolja();
+                PostaviZauzetaPolja();
 
-                ProvjeriDegeneraciju();
+                //ProvjeriDegeneraciju();
 
                 IzracunajDualneVarijable();
                 IzracunajRelativneTroskoveMODI();
@@ -60,7 +60,7 @@ namespace Transportni_problem
                     PreraspodjeliTeret(zatvoreniPutSMaxTeret);
                 }
 
-                else//ako je lista == null onda je(su) najveci relativnim trosak negativni, pa tu zavrsava MODI metoda
+                else//ako je lista == null onda je(su) najveci relativni trosak negativni, pa tu zavrsava MODI metoda
                 {
                     pronadenoOptimalnoRjesenje = true;
                 }
@@ -75,11 +75,12 @@ namespace Transportni_problem
 
             while (!pronadenoOptimalnoRjesenje)
             {
+                listaDualnihVarijabli.Clear();
                 PostaviRelativniTrosak();
                 IsprazniListuPredznaka();
-                ProvjeriZauzetaPolja();
+                PostaviZauzetaPolja();
 
-                ProvjeriDegeneraciju();
+                //ProvjeriDegeneraciju();
                 IzracunajRelativneTroskoveKamen();
                 List<Celija> listaCelijaSNjavecimRelativnimTroskom = PronadiNajveciPozitivniRelativniTrosak();
 
@@ -113,13 +114,26 @@ namespace Transportni_problem
             PronadiBrojOptimalnihRjesenja();
         }
 
+        public void IzracunajUkupniKapacitet()
+        {
+            //trazimo sumu kapaciteta ishodista
+            //isto se moze napraviviti i za potrebe odredista i usporediti jesu li te vrijedosti iste (ZTP vs OTP) 
+            foreach (Celija celija in listaCelija)
+            {
+                if (celija.opis == "Ai")
+                {
+                    sumaAi += celija.stvarniTrosak;
+                }
+            }
+        }
+
         public void IzracunajRelativneTroskoveKamen()
         {
             foreach (Celija neZauzetaCelija in listaCelija)//idemo po svim celijama i za nezauzete trazimo zatvoreni put
             {
                 if (neZauzetaCelija.opis == "Obicna" && neZauzetaCelija.zauzetoPolje == false)
                 {
-                    ProvjeriZauzetaPolja();
+                    PostaviZauzetaPolja();
                     ZatvoreniPut zatvoreniPut = PronadiZatvoreniPutKamen(neZauzetaCelija);
                     double relativniTrosak = 0;
 
@@ -254,7 +268,7 @@ namespace Transportni_problem
 
             return brojZauzetihPolja;
         }
-
+        /*
         public void ProvjeriDegeneraciju()
         {
             int brojZauzetihPolja = BrojZauzetihPolja();
@@ -279,7 +293,7 @@ namespace Transportni_problem
 
                 brojZauzetihPolja = BrojZauzetihPolja();
             }
-        }
+        }*/
 
         //metoda iz liste zatvorenih puteva, trazi onaj zatvoreni put na kojem mozemo prenijeti najvise tereta
         public ZatvoreniPut PronadiNajveciTeret(List<ZatvoreniPut> listaZatvorenihPuteva)
@@ -335,13 +349,13 @@ namespace Transportni_problem
             }
         }
 
-        public void ProvjeriZauzetaPolja()
+        public void PostaviZauzetaPolja()
         {
             foreach (Celija celija in listaCelija)
             {
                 if (celija.zauzetoPolje)
                 {
-                    if (celija.kolicinaTereta <= 0 && !celija.degenerirarana)
+                    if (celija.kolicinaTereta <= 0 /*&& !celija.degenerirarana*/)
                     {
                         celija.zauzetoPolje = false;
                     }
@@ -398,12 +412,7 @@ namespace Transportni_problem
                             }
                         }
                     }
-                    else if (prviProlaz && obicnaCelija.opis == "Ai")//samo za ispis sume
-                    {
-                        sumaAi += obicnaCelija.stvarniTrosak;
-                    }
                 }
-                prviProlaz = false;
             }
         }
 
@@ -467,8 +476,8 @@ namespace Transportni_problem
                 PostaviDobarPut();
                 List<Celija> listaCelijaNaZatvorenomPutu = new List<Celija>();
 
-                Predznak novi1 = new Predznak(true, redniBrojZatvorenogPuta);
-                celijaSNjavecimRelativnimTroskom.predznak.Add(novi1);
+                Predznak predznak1 = new Predznak(true, redniBrojZatvorenogPuta);
+                celijaSNjavecimRelativnimTroskom.predznak.Add(predznak1);
                 celijaSNjavecimRelativnimTroskom.zauzetoPolje = true;
                 listaCelijaNaZatvorenomPutu.Add(celijaSNjavecimRelativnimTroskom);
 
@@ -579,10 +588,10 @@ namespace Transportni_problem
                     else if (predznak.plus == false && predznak.redniBrojZatvorenogPuta == zatvoreniPutSMaxTeret.redniBrojZatvorenogPuta)
                     {
                         celija.kolicinaTereta -= kolicinaTeretaZaPremjestanje;
-                        if (celija.kolicinaTereta == 0)
+                        /*if (celija.kolicinaTereta == 0)
                         {
 
-                        }
+                        }*/
                     }
                 }
             }

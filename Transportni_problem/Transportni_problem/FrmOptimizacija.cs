@@ -66,17 +66,22 @@ namespace Transportni_problem
                                 richTextBox.Text = celija.stvarniTrosak.ToString();//obicnim celijama dodajemo stvarni trosak
                                 if (celija.zauzetoPolje == true)
                                 {
-                                    richTextBox.Text += "   " + celija.kolicinaTereta;//i ako im je kolicina tereta !=0 dodajemo razmake i tu kolicinu tereta
-                                    richTextBox.SelectionStart = 4;
-                                    richTextBox.SelectionLength = richTextBox.TextLength - 4;
+                                    richTextBox.Text += Environment.NewLine + celija.kolicinaTereta;//i ako im je kolicina tereta !=0 dodajemo razmake i tu kolicinu tereta
+                                    richTextBox.SelectionStart = celija.stvarniTrosak.ToString().Length + 1;//+1 radi newline
+                                    richTextBox.SelectionLength = celija.kolicinaTereta.ToString().Length;
                                     richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 14, FontStyle.Bold);//te na kraju kolicinu tereta povecamo
+                                    richTextBox.SelectionAlignment = HorizontalAlignment.Right;
 
                                     ukupniMinTrosakString += "(" + celija.stvarniTrosak + " * " + celija.kolicinaTereta + ")" + " + ";//za ispis min troska
                                     ukupniMinTrosak += celija.stvarniTrosak * celija.kolicinaTereta;//racunanje min troska
                                 }
                                 else
                                 {
-                                    richTextBox.Text += "       " + celija.relativniTrosak;
+                                    richTextBox.Text += Environment.NewLine + celija.relativniTrosak;
+                                    richTextBox.SelectionStart = celija.stvarniTrosak.ToString().Length + 1;//+1 radi newline
+                                    richTextBox.SelectionLength = celija.relativniTrosak.ToString().Length;
+                                    richTextBox.SelectionFont = new Font(richTextBox.Font.FontFamily, 10, FontStyle.Regular);//te na kraju kolicinu tereta povecamo
+                                    richTextBox.SelectionAlignment = HorizontalAlignment.Right;
                                 }
                             }
                             else

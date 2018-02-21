@@ -41,7 +41,7 @@ namespace Transportni_problem
                 labelaI.Text = "I" + i;
                 labelaI.Location = new Point(10, y);
                 labelaI.Size = new Size(30, 15);
-                y += 45;
+                y += 50;
 
                 pnlMatrica.Controls.Add(labelaI);
             }
@@ -53,7 +53,7 @@ namespace Transportni_problem
 
             if (pnlMatrica.Height < y)//ako je panel pre niski, povecamo ga
             {
-                pnlMatrica.Height = y + 45;
+                pnlMatrica.Height = y + 50;
             }
 
             pnlMatrica.Controls.Add(labelaIs);
@@ -139,7 +139,7 @@ namespace Transportni_problem
                     }
 
                     richTextBox.Location = new Point(x, y);
-                    richTextBox.Size = new Size(60, 40);
+                    richTextBox.Size = new Size(60, 45);
                     richTextBox.Multiline = true;
 
                     pnlMatrica.Controls.Add(richTextBox);
@@ -147,7 +147,7 @@ namespace Transportni_problem
                     if (j == brojOdredista + 1) //ako smo dosli do kraja reda, prebacujemo se u novi red
                     {
                         x = 40;
-                        y += 45;
+                        y += 50;
                     }
 
                     else //inace se samo pomicemo udesno
